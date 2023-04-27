@@ -1,7 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ArgLoginType, ArgRegisterType, authApi, ProfileType } from "features/auth/auth.api";
-import { AppDispatch, RootState } from "app/store";
-
+import { ArgLoginType, ArgRegisterType, authApi, DataForgot, ProfileType } from "features/auth/auth.api";
 
 const register = createAsyncThunk(
   "auth/register",
@@ -11,6 +9,7 @@ const register = createAsyncThunk(
       });
   }
 );
+
 const login = createAsyncThunk<{ profile: ProfileType }, ArgLoginType>("auth/login", async ({
                                                                                               email,
                                                                                               password,
@@ -20,6 +19,30 @@ const login = createAsyncThunk<{ profile: ProfileType }, ArgLoginType>("auth/log
     return { profile: res.data };
   }
 );
+
+const logout = createAsyncThunk("auth/logout", (thunkAPI) => {
+  authApi.logout()
+    .then(res => {
+    });
+});
+
+const authMe = createAsyncThunk<{ profile: ProfileType }>("auth/authMe", async (thunkAPI) => {
+  const res = await authApi.authMe();
+  return { profile: res.data };
+});
+
+const forgot = createAsyncThunk<void, DataForgot>("auth/forgot", async ({
+                                                                          email,
+                                                                          from,
+                                                                          message
+                                                                        }, thunkAPI) => {
+  const res = await authApi.forgot(email, from, message);
+});
+
+const changeName = createAsyncThunk<{ profile: ProfileType }, { name: string }>("auth/changeName", async ({ name }, thunkAPI) => {
+  const res = await authApi.changeName(name);
+  return { profile: res.data };
+});
 
 const slice = createSlice({
   name: "auth",
@@ -31,9 +54,18 @@ const slice = createSlice({
     builder.addCase(login.fulfilled, (state, action) => {
       state.profile = action.payload.profile;
     });
+    builder.addCase(logout.fulfilled, (state, action) => {
+      state.profile = null;
+    });
+    builder.addCase(authMe.fulfilled, (state, action) => {
+      state.profile = action.payload.profile;
+    });
+    builder.addCase(changeName.fulfilled, (state, action) => {
+      state.profile = action.payload.profile;
+    });
   }
 });
 
 export const authReducer = slice.reducer;
 export const authActions = slice.actions;
-export const authThunks = { register, login };
+export const authThunks = { register, login, logout, forgot, authMe, changeName };

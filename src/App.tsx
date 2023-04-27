@@ -4,10 +4,16 @@ import "./App.css";
 import { Outlet, Route, Routes } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "app/hooks";
 import { appActions } from "app/app.slice";
+import { authApi } from "features/auth/auth.api";
+import { authThunks } from "features/auth/auth.slice";
 
 function App() {
   const isLoading = useAppSelector<boolean>(state => state.app.isLoading)
   const dispatch = useAppDispatch()
+
+  const logoutHandler = () => {
+    dispatch(authThunks.logout())
+  }
 
   useEffect(() => {
     setTimeout(() => {
@@ -16,6 +22,9 @@ function App() {
   }, [])
   return (
     <div>
+      <div>
+        <button onClick={logoutHandler}>Logout</button>
+      </div>
       <Outlet />
       ss
 
