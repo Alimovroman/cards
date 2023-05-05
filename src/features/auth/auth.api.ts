@@ -44,10 +44,7 @@ export type RegisterResponseType = {
     __v: number;
   };
 };
-export type ArgRegisterType = {
-  email: string;
-  password: string;
-};
+export type ArgRegisterType = Omit<ArgLoginType, 'rememberMe'>
 
 export type ArgLoginType = {
   email: string;
@@ -58,22 +55,18 @@ export type ArgLoginType = {
 export type ProfileType = {
   _id: string;
   email: string;
+  rememberMe: boolean;
+  isAdmin: boolean;
   name: string;
-  avatar?: string;
+  verified: boolean; // подтвердил ли почту
   publicCardPacksCount: number;
-// количество колод
-
   created: Date;
   updated: Date;
-  isAdmin: boolean;
-  verified: boolean; // подтвердил ли почту
-  rememberMe: boolean;
-
+  avatar?: string;
   error?: string;
 }
 export type Response =  {
   info: string
-
   error: string;
 }
 export type DataForgot = {

@@ -2,18 +2,18 @@ import React from "react";
 import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
 import { store } from "./app/store";
-import App from "./App";
+import App from "app/App";
 import reportWebVitals from "./reportWebVitals";
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Login from "components/Login/Login";
-import Register from "components/Register/Register";
+import Login from "features/auth/Login/Login";
+import Register from "features/auth/Register/Register";
 import CheckEmail from "components/CheckEmail/CheckEmail";
 import SetNewPassword from "components/SetNewPassword/SetNewPassword";
-import ForgotPassword from "components/ForgotPassword/ForgotPassword";
+import ForgotPassword from "features/auth/ForgotPassword/ForgotPassword";
 import Profile from "components/Profile/Profile";
 import Packs from "components/Packs/Packs";
-import Cards from "components/Cards/Cards";
+import Cards from "features/Cards/Cards";
 import Learn from "components/Learn/Learn";
 
 const container = document.getElementById("root")!;
@@ -60,10 +60,12 @@ const router = createBrowserRouter([
         path: "learn",
         element: <Learn />
       }
-
     ]
-  }
-]);
+  },
+
+
+])
+;
 
 root.render(
   <Provider store={store}>

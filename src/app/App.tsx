@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
-import { Counter } from "./features/counter/Counter";
-import "./App.css";
+import { Counter } from "features/counter/Counter";
+import "app/App.css";
 import { Outlet, Route, Routes } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "app/hooks";
 import { appActions } from "app/app.slice";
-import { authApi } from "features/auth/auth.api";
 import { authThunks } from "features/auth/auth.slice";
+import style from './App.module.css'
 
 function App() {
   const isLoading = useAppSelector<boolean>(state => state.app.isLoading)
@@ -22,11 +22,18 @@ function App() {
   }, [])
   return (
     <div>
-      <div>
-        <button onClick={logoutHandler}>Logout</button>
+      <div className={style.header}>
+        <div>
+          Logo
+        </div>
+        <div>
+          <button onClick={logoutHandler}>Logout</button>
+        </div>
       </div>
+
+      {isLoading && <h1>Loading...</h1>}
       <Outlet />
-      ss
+      <Counter />
 
     </div>
   );

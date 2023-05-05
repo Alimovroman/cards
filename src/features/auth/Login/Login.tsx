@@ -1,5 +1,6 @@
 import React from "react";
-import style from "./Login.module.css";
+import styleAuth from 'features/auth/Auth.module.css';
+import style from 'features/auth/Login/Login.module.css';
 import { useAppDispatch } from "app/hooks";
 import { authThunks } from "features/auth/auth.slice";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -18,9 +19,9 @@ const Login = () => {
   //   dispatch(authThunks.login({email :"alimov.ramon@gmail.com", password: "1a2s3d4f5g", rememberMe: false}))
   // };
   return (
-    <div>
-      <h2>Login</h2>
-      <form onSubmit={handleSubmit(onSubmit)}>
+    <div className={styleAuth.formContainer}>
+      <form onSubmit={handleSubmit(onSubmit)} className={styleAuth.form}>
+        <div className={styleAuth.title}>Login</div>
         <div>
           <input {...register("email", { required: true })} />
         </div>
@@ -29,11 +30,11 @@ const Login = () => {
           <input type={"password"} {...register("password", { required: true })} />
         </div>
         {errors.password && <span>This field is required</span>}
-        <div>
+        <div className={style.checkBox}>
           <input type={"checkbox"} {...register("rememberMe")} /><span>RememberMe</span>
         </div>
         <div>
-          <button>Login</button>
+          <button className={styleAuth.button}>Login</button>
         </div>
       </form>
 

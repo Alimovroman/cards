@@ -1,8 +1,8 @@
 import React from "react";
 import { useAppDispatch } from "app/hooks";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { ArgLoginType, DataForgot } from "features/auth/auth.api";
 import { authThunks } from "features/auth/auth.slice";
+import styleAuth from "features/auth/Auth.module.css";
 
 const ForgotPassword = () => {
   const dispatch = useAppDispatch();
@@ -22,15 +22,15 @@ const ForgotPassword = () => {
 
   };
   return (
-    <div>
-      forgot-password
-      <form onSubmit={handleSubmit(onSubmit)}>
+    <div className={styleAuth.formContainer}>
+      <form onSubmit={handleSubmit(onSubmit)} className={styleAuth.form}>
+        <div className={styleAuth.title}>forgot password</div>
         <div>
           <input {...register("email", { required: true })} />
         </div>
         {errors.email && <span>This field is required</span>}
         <div>
-          <button>Send</button>
+          <button className={styleAuth.button}>Send</button>
         </div>
       </form>
     </div>
