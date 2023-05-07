@@ -10,6 +10,9 @@ const slice = createSlice({
   reducers: {
     setIsloading: (state, action: PayloadAction<{isLoading: boolean}>) => {
       state.isLoading = action.payload.isLoading
+    },
+    setAppError: (state, action: PayloadAction<{error: string | null}>) => {
+      state.error = action.payload.error
     }
   }
 })

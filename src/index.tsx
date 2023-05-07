@@ -15,6 +15,7 @@ import Profile from "components/Profile/Profile";
 import Packs from "components/Packs/Packs";
 import Cards from "features/Cards/Cards";
 import Learn from "components/Learn/Learn";
+import { GlobalError } from "common/GlobalError/GlobalError";
 
 const container = document.getElementById("root")!;
 const root = createRoot(container);
@@ -70,6 +71,7 @@ const router = createBrowserRouter([
 root.render(
   <Provider store={store}>
     <RouterProvider router={router} />
+    <GlobalError />
   </Provider>
 );
 

@@ -10,7 +10,6 @@ const Register = () => {
   const { register, handleSubmit, watch, formState: { errors } } = useForm<ArgRegisterType>();
   const dispatch = useAppDispatch();
   const onSubmit: SubmitHandler<ArgRegisterType> = data => {
-    console.log(data);
     dispatch(authThunks.register(data));
   };
 
