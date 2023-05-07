@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "app/hooks";
+import { useAppDispatch, useAppSelector } from "common/hooks";
 import { ArgLoginType, ProfileType } from "features/auth/auth.api";
 import { authThunks } from "features/auth/auth.slice";
 import { SubmitHandler, useForm } from "react-hook-form";

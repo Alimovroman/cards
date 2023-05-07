@@ -1,25 +1,25 @@
 import React, { useEffect } from "react";
 import { Counter } from "features/counter/Counter";
 import "app/App.css";
-import { Outlet, Route, Routes } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "app/hooks";
-import { appActions } from "app/app.slice";
+import { Outlet, useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "common/hooks";
 import { authThunks } from "features/auth/auth.slice";
 import style from './App.module.css'
+import LinearProgress from '@mui/material/LinearProgress';
 
 function App() {
   const isLoading = useAppSelector<boolean>(state => state.app.isLoading)
+  const isLoggedIn = useAppSelector<boolean>(state => state.auth.isLoggedIn)
   const dispatch = useAppDispatch()
+  const navigate = useNavigate();
 
   const logoutHandler = () => {
     dispatch(authThunks.logout())
   }
-
   useEffect(() => {
-    setTimeout(() => {
-      dispatch(appActions.setIsloading({isLoading: false}))
-    }, 3000)
-  }, [])
+    dispatch(authThunks.authMe())
+  },[])
+
   return (
     <div>
       <div className={style.header}>
@@ -31,7 +31,7 @@ function App() {
         </div>
       </div>
 
-      {isLoading && <h1>Loading...</h1>}
+      {isLoading && <LinearProgress color="secondary"/>}
       <Outlet />
       <Counter />
 

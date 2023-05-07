@@ -1,18 +1,28 @@
 import React from "react";
 import styleAuth from 'features/auth/Auth.module.css';
 import style from 'features/auth/Login/Login.module.css';
-import { useAppDispatch } from "app/hooks";
+import { useAppDispatch } from "common/hooks";
 import { authThunks } from "features/auth/auth.slice";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { ArgLoginType } from "features/auth/auth.api";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const dispatch = useAppDispatch();
   const { register, handleSubmit, watch, formState: { errors } } = useForm<ArgLoginType>();
+  const navigate = useNavigate()
 
   const onSubmit: SubmitHandler<ArgLoginType> = data => {
-    console.log(data);
-    dispatch(authThunks.login(data));
+    dispatch(authThunks.login(data))
+      .unwrap()
+      .then((res) => {
+        toast.success("Вы успешно залогинились")
+        navigate('/')
+      })
+      .catch((e) => {
+        toast.error(e.response.data.error)
+      })
   };
 
   // const loginHandler = () => {

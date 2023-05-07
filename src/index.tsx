@@ -16,6 +16,7 @@ import Packs from "components/Packs/Packs";
 import Cards from "features/Cards/Cards";
 import Learn from "components/Learn/Learn";
 import { GlobalError } from "common/GlobalError/GlobalError";
+import ErrorPage from "components/ErrorPage/ErrorPage";
 
 const container = document.getElementById("root")!;
 const root = createRoot(container);
@@ -24,9 +25,11 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
-    children: [
+    errorElement: <ErrorPage />,
+  },
+  //   children: [
       {
-        path: "login/",
+        path: "login",
         element: <Login />
       },
       {
@@ -61,10 +64,8 @@ const router = createBrowserRouter([
         path: "learn",
         element: <Learn />
       }
-    ]
-  },
-
-
+    // ]
+  // },
 ])
 ;
 

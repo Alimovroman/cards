@@ -1,26 +1,24 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { ArgLoginType, ArgRegisterType, authApi, DataForgot, ProfileType } from "features/auth/auth.api";
-import { AppDispatch, RootState } from "app/store";
-import { createAppAsyncThunk } from "common/utils/create-app-async-thunk";
-import { appActions } from "app/app.slice";
-import { thunkTryCatch } from "common/utils/thunk-try-catch";
+import { createAppAsyncThunk } from "common/utils";
+import { thunkTryCatch } from "common/utils";
 
 const register = createAppAsyncThunk<void, ArgRegisterType>
 ("auth/register", async (arg, thunkAPI) => {
     return thunkTryCatch(thunkAPI, async () => {
       const res = await authApi.register(arg.email, arg.password);
-
     });
   }
 );
 
-
 const login = createAppAsyncThunk<{ profile: ProfileType }, ArgLoginType>
 ("auth/login", async (arg, thunkAPI) => {
     return thunkTryCatch(thunkAPI, async () => {
-      const res = await authApi.login(arg.email, arg.password, arg.rememberMe);
-      return { profile: res.data };
-    });
+        const res = await authApi.login(arg.email, arg.password, arg.rememberMe);
+        return { profile: res.data };
+      },
+      true
+    );
   }
 );
 
@@ -46,7 +44,8 @@ const changeName = createAppAsyncThunk<{ profile: ProfileType }, { name: string 
 const slice = createSlice({
   name: "auth",
   initialState: {
-    profile: null as ProfileType | null
+    profile: null as ProfileType | null,
+    isLoggedIn: false
   },
   reducers: {},
   extraReducers: (builder) => {

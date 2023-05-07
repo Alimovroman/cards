@@ -1,5 +1,5 @@
 import React from "react";
-import { useAppDispatch } from "app/hooks";
+import { useAppDispatch } from "common/hooks";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { authThunks } from "features/auth/auth.slice";
 import styleAuth from "features/auth/Auth.module.css";

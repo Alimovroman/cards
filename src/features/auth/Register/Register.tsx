@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styleAuth from "features/auth/Auth.module.css";
-import { useAppDispatch } from "app/hooks";
+import { useAppDispatch } from "common/hooks";
 import { authThunks } from "features/auth/auth.slice";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { ArgRegisterType } from "features/auth/auth.api";
+import { unHandleAction } from "common/actions/unhandle.action";
 
 
 const Register = () => {
@@ -12,6 +13,9 @@ const Register = () => {
   const onSubmit: SubmitHandler<ArgRegisterType> = data => {
     dispatch(authThunks.register(data));
   };
+  useEffect(() => {
+    dispatch(unHandleAction())
+  }, [])
 
   return (
     <div className={styleAuth.formContainer}>
