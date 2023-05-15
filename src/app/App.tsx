@@ -6,45 +6,25 @@ import { useAppDispatch, useAppSelector } from "common/hooks";
 import { authThunks } from "features/auth/auth.slice";
 import style from "./App.module.css";
 import LinearProgress from "@mui/material/LinearProgress";
+import { Header } from "features/Header/Header";
+import Packs from "components/Packs/Packs";
 
 function App() {
   const isLoading = useAppSelector<boolean>(state => state.app.isLoading);
-  const isLoggedIn = useAppSelector<boolean>(state => state.auth.isLoggedIn);
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
 
-  const onNavigateToLogin = () => {
-    navigate("/login");
-  };
-  const logoutHandler = () => {
-    dispatch(authThunks.logout())
-      .then(() => {
-        navigate("/login");
-      });
-  };
+
+
   useEffect(() => {
     dispatch(authThunks.authMe());
   }, []);
 
   return (
     <div>
-      <div className={style.header}>
-        <div>
-          Logo
-        </div>
-        <div>
-          {isLoggedIn
-            ? <button onClick={logoutHandler}>Logout</button>
-            : <button onClick={onNavigateToLogin}>Login in</button>
-          }
-
-        </div>
-      </div>
-
+      <Header />
       {isLoading && <LinearProgress color="secondary" />}
+      <Packs />
       <Outlet />
-      <Counter />
-
     </div>
   );
 }

@@ -1,0 +1,15 @@
+.settingsBlock {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.sliderWrapper {
+    display: flex;
+}
+.slider {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.tableHead {
+    background-color: #eae5e5;
+}
