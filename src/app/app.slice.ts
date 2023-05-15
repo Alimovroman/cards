@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AxiosError, isAxiosError } from "axios";
-import { authThunks } from "features/auth/auth.slice";
+
 
 const slice = createSlice({
   name: "app",
@@ -30,12 +30,13 @@ const slice = createSlice({
           state.isLoading = false;
           if(!action.payload.showGlobalError) return
 
-          const err = action.payload as Error | AxiosError<{ error: string }>;
+          const err = action.payload.e as Error | AxiosError<{ error: string }>;
           if (isAxiosError(err)) {
             state.error = err.response ? err.response.data.error : err.message;
           } else {
             state.error = `Native error ${err.message}`
           }
+
         }
       )
       .addMatcher((action) => action.type.endsWith("/fulfilled"),

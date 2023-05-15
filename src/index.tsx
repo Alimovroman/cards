@@ -26,8 +26,8 @@ const router = createBrowserRouter([
     path: "/",
     element: <App />,
     errorElement: <ErrorPage />,
-  },
-  //   children: [
+  // },
+    children: [
       {
         path: "login",
         element: <Login />
@@ -64,8 +64,8 @@ const router = createBrowserRouter([
         path: "learn",
         element: <Learn />
       }
-    // ]
-  // },
+    ]
+  },
 ])
 ;
 

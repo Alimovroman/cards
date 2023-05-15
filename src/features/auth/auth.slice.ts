@@ -17,23 +17,31 @@ const login = createAppAsyncThunk<{ profile: ProfileType }, ArgLoginType>
         const res = await authApi.login(arg.email, arg.password, arg.rememberMe);
         return { profile: res.data };
       },
-      true
+      false
     );
   }
 );
 
-const logout = createAppAsyncThunk("auth/logout", async (thunkAPI) => {
-  const res = await authApi.logout();
+const logout = createAppAsyncThunk("auth/logout", async (arg, thunkAPI) => {
+  return thunkTryCatch(thunkAPI, async () => {
+    const res = await authApi.logout();
+  });
+
 
 });
 
-const authMe = createAppAsyncThunk<{ profile: ProfileType }>("auth/authMe", async (thunkAPI) => {
-  const res = await authApi.authMe();
-  return { profile: res.data };
+const authMe = createAppAsyncThunk<{ profile: ProfileType }>("auth/authMe", async (arg, thunkAPI) => {
+  return thunkTryCatch(thunkAPI, async () => {
+    const res = await authApi.authMe();
+    return { profile: res.data };
+  });
+
 });
 
 const forgot = createAppAsyncThunk<void, DataForgot>("auth/forgot", async (arg, thunkAPI) => {
-  const res = await authApi.forgot(arg.email, arg.from, arg.message);
+  return thunkTryCatch(thunkAPI, async () => {
+    const res = await authApi.forgot(arg.email, arg.from, arg.message);
+  });
 });
 
 const changeName = createAppAsyncThunk<{ profile: ProfileType }, { name: string }>("auth/changeName", async (arg, thunkAPI) => {
@@ -57,12 +65,15 @@ const slice = createSlice({
       // })
       .addCase(login.fulfilled, (state, action) => {
         state.profile = action.payload.profile;
+        state.isLoggedIn = true
       })
       .addCase(logout.fulfilled, (state, action) => {
         state.profile = null;
+        state.isLoggedIn = false
       })
       .addCase(authMe.fulfilled, (state, action) => {
         state.profile = action.payload.profile;
+        state.isLoggedIn = true
       })
       .addCase(changeName.fulfilled, (state, action) => {
         state.profile = action.payload.profile;

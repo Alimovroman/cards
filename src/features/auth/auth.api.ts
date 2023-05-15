@@ -50,6 +50,7 @@ export type ArgLoginType = {
   email: string;
   password: string;
   rememberMe: boolean;
+
 };
 
 export type ProfileType = {

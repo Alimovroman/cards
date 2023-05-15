@@ -6,22 +6,29 @@ import { authThunks } from "features/auth/auth.slice";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { ArgLoginType } from "features/auth/auth.api";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 const Login = () => {
   const dispatch = useAppDispatch();
   const { register, handleSubmit, watch, formState: { errors } } = useForm<ArgLoginType>();
   const navigate = useNavigate()
 
+  const onNavigateToSignUp = () => {
+    navigate('/register')
+  }
+
   const onSubmit: SubmitHandler<ArgLoginType> = data => {
     dispatch(authThunks.login(data))
       .unwrap()
       .then((res) => {
         toast.success("Вы успешно залогинились")
-        navigate('/')
+        setTimeout(() => {
+          navigate('/')
+        }, 1500)
+
       })
-      .catch((e) => {
-        toast.error(e.response.data.error)
+      .catch((err) => {
+        toast.error(err.e.response.data.error)
       })
   };
 
@@ -44,10 +51,20 @@ const Login = () => {
           <input type={"checkbox"} {...register("rememberMe")} /><span>RememberMe</span>
         </div>
         <div>
+          <NavLink to={"/forgot-password"} >
+            Forgot password?
+          </NavLink>
+        </div>
+        <div>
           <button className={styleAuth.button}>Login</button>
         </div>
       </form>
-
+      {/*<div>*/}
+      {/*  <button onClick={}>Forgot password?</button>*/}
+      {/*</div>*/}
+        <div>
+          <button onClick={onNavigateToSignUp}>Sign up</button>
+        </div>
     </div>
   );
 };
