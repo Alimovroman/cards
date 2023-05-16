@@ -11,6 +11,16 @@ const minDistance = 10;
 
 export const SliderPacks: FC = () => {
   const [value, setValue] = React.useState<number[]>([20, 37]);
+  const handleChangeCommitet = (
+    event: React.SyntheticEvent | Event,
+    newValue: number | number[],
+
+  ) => {
+    if (!Array.isArray(newValue)) {
+      return;
+    }
+    console.log(value[0]);
+  };
 
   const handleChange = (
     event: Event,
@@ -38,6 +48,7 @@ export const SliderPacks: FC = () => {
               getAriaLabel={() => "Minimum distance"}
               value={value}
               onChange={handleChange}
+              onChangeCommitted={handleChangeCommitet}
               valueLabelDisplay="auto"
               getAriaValueText={valuetext}
               disableSwap
