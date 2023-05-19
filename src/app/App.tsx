@@ -8,15 +8,20 @@ import style from "./App.module.css";
 import LinearProgress from "@mui/material/LinearProgress";
 import { Header } from "features/Header/Header";
 import Packs from "components/Packs/Packs";
+import { packsThunk } from "components/Packs/packs.slice";
+import { isLoadingSelector } from "app/app.selector";
 
 function App() {
-  const isLoading = useAppSelector<boolean>(state => state.app.isLoading);
+  const isLoading = useAppSelector(isLoadingSelector);
   const dispatch = useAppDispatch();
 
 
 
   useEffect(() => {
-    dispatch(authThunks.authMe());
+    dispatch(authThunks.authMe())
+      .then(() => {
+      dispatch(packsThunk.fetchPacks({page:1}))
+    })
   }, []);
 
   return (

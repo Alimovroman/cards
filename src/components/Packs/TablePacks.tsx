@@ -7,8 +7,9 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import style from './Packs.module.css'
-import { CardsPacksType, packsThunk } from "components/Packs/packs.slice";
+import { packsThunk } from "components/Packs/packs.slice";
 import { useAppDispatch } from "common/hooks";
+import { PackType } from "components/Packs/packs.api";
 
 
 
@@ -20,11 +21,19 @@ import { useAppDispatch } from "common/hooks";
 // ];
 
 type PropsType = {
-  cardPacks: CardsPacksType[] | undefined
+  cardPacks: PackType[] | undefined
   page: number | undefined
 }
 export const TablePacks: FC<PropsType> = ({cardPacks, page}) => {
   const dispatch = useAppDispatch()
+
+  const updateHandler = (pack: PackType) => {
+    const newName = "🦖" + Math.random();
+    dispatch(packsThunk.updatePack({...pack, name: newName}))
+  }
+  const removeHandler = (id: string) => {
+    dispatch(packsThunk.removePack(id))
+  }
 
   const createData = useCallback ((
     name: string,
@@ -43,7 +52,7 @@ export const TablePacks: FC<PropsType> = ({cardPacks, page}) => {
   const rows = cardPacks !== undefined
     ? [...cardPacks]
     : null
-
+  console.log(cardPacks);
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -57,18 +66,22 @@ export const TablePacks: FC<PropsType> = ({cardPacks, page}) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {cardPacks && cardPacks.map((row) => (
+          {cardPacks && cardPacks.map((p) => (
             <TableRow
-              key={row.user_id}
+              key={p._id}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               <TableCell component="th" scope="row">
-                {row.name}
+                {p.name}
               </TableCell>
-              <TableCell align="right">{row.cardsCount}</TableCell>
-              <TableCell align="right">{row.updated}</TableCell>
-              <TableCell align="right">{row.user_name}</TableCell>
-              <TableCell align="right">{"Экшены"}</TableCell>
+              <TableCell align="right">{p.cardsCount}</TableCell>
+              <TableCell align="right">{p.updated}</TableCell>
+              <TableCell align="right">{p.user_name}</TableCell>
+              <TableCell align="right">{<>
+                <button onClick={() => removeHandler(p._id)}>Remove</button>
+                <button onClick={() => updateHandler(p)}>Update</button>
+                </>
+              }</TableCell>
             </TableRow>
           ))}
         </TableBody>

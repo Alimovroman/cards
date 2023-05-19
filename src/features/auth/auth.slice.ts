@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { ArgLoginType, ArgRegisterType, authApi, DataForgot, ProfileType } from "features/auth/auth.api";
 import { createAppAsyncThunk } from "common/utils";
 import { thunkTryCatch } from "common/utils";
+import { packsThunk } from "components/Packs/packs.slice";
 
 const register = createAppAsyncThunk<void, ArgRegisterType>
 ("auth/register", async (arg, thunkAPI) => {
@@ -25,6 +26,7 @@ const login = createAppAsyncThunk<{ profile: ProfileType }, ArgLoginType>
 const logout = createAppAsyncThunk("auth/logout", async (arg, thunkAPI) => {
   return thunkTryCatch(thunkAPI, async () => {
     const res = await authApi.logout();
+    thunkAPI.dispatch(packsThunk.fetchPacks({ page: 1 }))
   });
 
 

@@ -5,26 +5,34 @@ import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import { TablePacks } from "components/Packs/TablePacks";
 import { useAppDispatch, useAppSelector } from "common/hooks";
-import { packsThunk, PacksType } from "components/Packs/packs.slice";
+import { packsThunk } from "components/Packs/packs.slice";
+import {
+  allPageSelector,
+  cardPacksSelector,
+  pageSelector
+} from "components/Packs/packs.selector";
 
 
 const Packs = () => {
-  const packs = useAppSelector<PacksType | null>(state => state.packs.packs);
-  const cardPacks = packs?.cardPacks;
-  const page = packs?.page;
-  let allPage = packs ? Math.ceil(packs.cardPacksTotalCount / packs.pageCount) : 0;
+  const cardPacks = useAppSelector(cardPacksSelector)
+  const page = useAppSelector(pageSelector)
   const dispatch = useAppDispatch();
+  let allPage =  useAppSelector(allPageSelector)
 
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
-    dispatch(packsThunk.setPacks({ page: value }));
+    dispatch(packsThunk.fetchPacks({ page: value }));
 
   };
   const addNewPack = () => {
-    dispatch(packsThunk.addNewPacks({title: "new pack" }));
+    const newPack = {
+      name: "🦁" + Math.random(),
+    };
+    dispatch(packsThunk.addNewPacks(newPack))
   };
 
+
   useEffect(() => {
-    dispatch(packsThunk.setPacks({ page: 1 }));
+    dispatch(packsThunk.fetchPacks({ page: 1 }));
   }, []);
 
   return (
