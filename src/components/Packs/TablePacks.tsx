@@ -1,57 +1,49 @@
 import React, { FC, useCallback } from "react";
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import style from './Packs.module.css'
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import style from "./Packs.module.css";
 import { packsThunk } from "components/Packs/packs.slice";
-import { useAppDispatch } from "common/hooks";
+import { useActions } from "common/hooks";
 import { PackType } from "components/Packs/packs.api";
 
-
-
-// const _rows = [
-//   createData('Pack Name', 4, '18.03.2021', 'Ivan Ivanov', 'какие то кнопки'),
-//   createData('Pack Name', 4, '18.03.2021', 'Ivan Ivanov', 'какие то кнопки'),
-//   createData('Pack Name', 4, '18.03.2021', 'Ivan Ivanov', 'какие то кнопки'),
-//   createData('Pack Name', 4, '18.03.2021', 'Ivan Ivanov', 'какие то кнопки'),
-// ];
 
 type PropsType = {
   cardPacks: PackType[] | undefined
   page: number | undefined
 }
-export const TablePacks: FC<PropsType> = ({cardPacks, page}) => {
-  const dispatch = useAppDispatch()
+export const TablePacks: FC<PropsType> = ({ cardPacks, page }) => {
+  const { updatePack, removePack, sortCardPacks } = useActions(packsThunk);
 
   const updateHandler = (pack: PackType) => {
     const newName = "🦖" + Math.random();
-    dispatch(packsThunk.updatePack({...pack, name: newName}))
-  }
+    updatePack({ ...pack, name: newName });
+  };
   const removeHandler = (id: string) => {
-    dispatch(packsThunk.removePack(id))
-  }
+    removePack(id);
+  };
 
-  const createData = useCallback ((
+  const createData = useCallback((
     name: string,
     cards: number,
     lastUpdated: string,
     createdBy: string,
-    actions: any,
+    actions: any
   ) => {
     return { name, cards, lastUpdated, createdBy, actions };
-  }, [])
+  }, []);
 
   const onSortCards = () => {
-    page && dispatch(packsThunk.sortCardPacks({num: 0 }))
-  }
+    page && sortCardPacks({ num: 0 });
+  };
 
   const rows = cardPacks !== undefined
     ? [...cardPacks]
-    : null
+    : null;
   console.log(cardPacks);
   return (
     <TableContainer component={Paper}>
@@ -69,7 +61,7 @@ export const TablePacks: FC<PropsType> = ({cardPacks, page}) => {
           {cardPacks && cardPacks.map((p) => (
             <TableRow
               key={p._id}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
               <TableCell component="th" scope="row">
                 {p.name}
@@ -80,7 +72,7 @@ export const TablePacks: FC<PropsType> = ({cardPacks, page}) => {
               <TableCell align="right">{<>
                 <button onClick={() => removeHandler(p._id)}>Remove</button>
                 <button onClick={() => updateHandler(p)}>Update</button>
-                </>
+              </>
               }</TableCell>
             </TableRow>
           ))}

@@ -7,7 +7,8 @@ const slice = createSlice({
   initialState: {
     error: null as string | null,
     isLoading: false,
-    isAppInitialized: false
+    isAppInitialized: false,
+    unHandleActions: [] as string[],
   },
   reducers: {
     setIsloading: (state, action: PayloadAction<{ isLoading: boolean }>) => {

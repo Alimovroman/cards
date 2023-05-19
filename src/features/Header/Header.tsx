@@ -1,18 +1,18 @@
 import React, { FC } from "react";
 import style from "./Header.module.css";
-import { useAppDispatch, useAppSelector } from "common/hooks";
+import { useActions, useAppSelector } from "common/hooks";
 import { authThunks } from "features/auth/auth.slice";
 import { useNavigate } from "react-router-dom";
 
 export const Header: FC = () => {
   const isLoggedIn = useAppSelector<boolean>(state => state.auth.isLoggedIn);
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
+  const {logout} = useActions(authThunks);
   const onNavigateToLogin = () => {
     navigate("/login");
   };
   const logoutHandler = () => {
-    dispatch(authThunks.logout())
+    logout()
       .then(() => {
         navigate("/login");
       });

@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
 import styleAuth from "features/auth/Auth.module.css";
-import { useAppDispatch } from "common/hooks";
+import { useActions } from "common/hooks";
 import { authThunks } from "features/auth/auth.slice";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { ArgRegisterType } from "features/auth/auth.api";
-import { unHandleAction } from "common/actions/unhandle.action";
+import { commonActions } from "common/actions/unhandle.action";
 import { appActions } from "app/app.slice";
 
 type DataFormType = ArgRegisterType & {
@@ -12,18 +12,20 @@ type DataFormType = ArgRegisterType & {
 }
 const Register = () => {
   const { register, handleSubmit, watch, formState: { errors } } = useForm<DataFormType>();
-  const dispatch = useAppDispatch();
+  const {setAppError} = useActions(appActions);
+  const {register: registerThank} = useActions(authThunks);
+  const {unHandleAction} = useActions(commonActions);
   const onSubmit: SubmitHandler<DataFormType> = dataForm => {
     if(dataForm.password === dataForm.passwordDupl) {
       const {email, password} = dataForm
-      dispatch(authThunks.register({password, email}));
+      registerThank({password, email});
     } else {
-      dispatch(appActions.setAppError({error: "the password must be the same" }))
+      setAppError({error: "the password must be the same" })
     }
 
   };
   useEffect(() => {
-    dispatch(unHandleAction())
+    unHandleAction()
   }, [])
 
   return (

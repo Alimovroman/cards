@@ -1,7 +1,7 @@
 import React from "react";
 import styleAuth from 'features/auth/Auth.module.css';
 import style from 'features/auth/Login/Login.module.css';
-import { useAppDispatch } from "common/hooks";
+import { useActions } from "common/hooks";
 import { authThunks } from "features/auth/auth.slice";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { ArgLoginType } from "features/auth/auth.api";
@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 import { NavLink, useNavigate } from "react-router-dom";
 
 const Login = () => {
-  const dispatch = useAppDispatch();
+  const {login} = useActions(authThunks)
   const { register, handleSubmit, watch, formState: { errors } } = useForm<ArgLoginType>();
   const navigate = useNavigate()
 
@@ -18,7 +18,7 @@ const Login = () => {
   }
 
   const onSubmit: SubmitHandler<ArgLoginType> = data => {
-    dispatch(authThunks.login(data))
+    login(data)
       .unwrap()
       .then((res) => {
         toast.success("Вы успешно залогинились")
@@ -32,9 +32,6 @@ const Login = () => {
       })
   };
 
-  // const loginHandler = () => {
-  //   dispatch(authThunks.login({email :"alimov.ramon@gmail.com", password: "1a2s3d4f5g", rememberMe: false}))
-  // };
   return (
     <div className={styleAuth.formContainer}>
       <form onSubmit={handleSubmit(onSubmit)} className={styleAuth.form}>

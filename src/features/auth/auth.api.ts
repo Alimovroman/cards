@@ -61,8 +61,8 @@ export type ProfileType = {
   name: string;
   verified: boolean; // подтвердил ли почту
   publicCardPacksCount: number;
-  created: Date;
-  updated: Date;
+  created: Date | string;
+  updated: Date | string;
   avatar?: string;
   error?: string;
 }

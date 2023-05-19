@@ -2,7 +2,6 @@ import { createSlice } from "@reduxjs/toolkit";
 import { createAppAsyncThunk, thunkTryCatch } from "common/utils";
 import {
   ArgCreatePackType,
-  CreatePackResponseType,
   FetchPacksResponseType,
   packsApi,
   PackType
