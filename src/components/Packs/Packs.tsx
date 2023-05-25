@@ -19,6 +19,7 @@ const Packs = () => {
   let allPage = useAppSelector(allPageSelector);
   const { fetchPacks, addNewPacks } = useActions(packsThunk);
 
+
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
     fetchPacks({ page: value });
   };

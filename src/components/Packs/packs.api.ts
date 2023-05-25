@@ -1,8 +1,17 @@
 import { instance } from "common/api";
 
 export const packsApi = {
+  // getPacks: (page: number) => {
+  //   return instance.get<FetchPacksResponseType>(`cards/pack?page=${page}`);
+  // },
   getPacks: (page: number) => {
-    return instance.get<FetchPacksResponseType>(`cards/pack?page=${page}`);
+    return instance.get<FetchPacksResponseType>(`cards/pack?page=${page}`, {
+      params: {
+        //❗Ваш user_id
+        user_id: "6449575b41fe56350487d85c",
+        pageCount: 20,
+      },
+    });
   },
   sortCardPacks: (num: number) => {
     return instance.get<FetchPacksResponseType>(`cards/pack?sortPacks=${num}cardsCount`);

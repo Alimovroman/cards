@@ -28,7 +28,7 @@ function App() {
     <div>
       <Header />
       {isLoading && <LinearProgress color="secondary" />}
-      <Packs />
+      {/*<Packs />*/}
       <Outlet />
     </div>
   );

@@ -13,7 +13,7 @@ import SetNewPassword from "components/SetNewPassword/SetNewPassword";
 import ForgotPassword from "features/auth/ForgotPassword/ForgotPassword";
 import Profile from "components/Profile/Profile";
 import Packs from "components/Packs/Packs";
-import Cards from "features/Cards/Cards";
+import Cards from "features/Cards/components/Cards";
 import Learn from "components/Learn/Learn";
 import { GlobalError } from "common/GlobalError/GlobalError";
 import ErrorPage from "components/ErrorPage/ErrorPage";
@@ -53,11 +53,11 @@ const router = createBrowserRouter([
         element: <Profile />
       },
       {
-        path: "packs",
+        path: "packs/",
         element: <Packs />
       },
       {
-        path: "cards",
+        path: "cards/:packId",
         element: <Cards />
       },
       {

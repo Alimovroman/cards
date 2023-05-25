@@ -8,7 +8,7 @@ const slice = createSlice({
     error: null as string | null,
     isLoading: false,
     isAppInitialized: false,
-    unHandleActions: [] as string[],
+    unHandleActions: [] as string[]
   },
   reducers: {
     setIsloading: (state, action: PayloadAction<{ isLoading: boolean }>) => {
@@ -20,22 +20,24 @@ const slice = createSlice({
   },
   extraReducers: builder => {
     builder
-      .addMatcher((action) => action.type.endsWith("/pending"),
+      .addMatcher((action) => {
+          if (action.type === "cardsApi/executeQuery/pending") return false;
+          return action.type.endsWith("/pending");
+        },
         (state, action) => {
           state.isLoading = true;
-          console.log("addmatcher reducer");
         }
       )
       .addMatcher((action) => action.type.endsWith("/rejected"),
         (state, action) => {
           state.isLoading = false;
-          if(!action.payload.showGlobalError) return
+          if (!action.payload.showGlobalError) return;
 
           const err = action.payload.e as Error | AxiosError<{ error: string }>;
           if (isAxiosError(err)) {
             state.error = err.response ? err.response.data.error : err.message;
           } else {
-            state.error = `Native error ${err.message}`
+            state.error = `Native error ${err.message}`;
           }
 
         }
@@ -46,7 +48,7 @@ const slice = createSlice({
         })
       .addDefaultCase((state, action) => {
         console.log("addDefaultCase 🚀", action.type);
-      })
+      });
   }
 });
 

@@ -1,1 +1,1 @@
-export {instance} from './common.api'
+export {instance, baseURL} from './common.api'

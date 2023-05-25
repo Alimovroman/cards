@@ -10,6 +10,8 @@ import style from "./Packs.module.css";
 import { packsThunk } from "components/Packs/packs.slice";
 import { useActions } from "common/hooks";
 import { PackType } from "components/Packs/packs.api";
+import { useNavigate } from "react-router-dom";
+
 
 
 type PropsType = {
@@ -18,6 +20,7 @@ type PropsType = {
 }
 export const TablePacks: FC<PropsType> = ({ cardPacks, page }) => {
   const { updatePack, removePack, sortCardPacks } = useActions(packsThunk);
+  const navigate = useNavigate()
 
   const updateHandler = (pack: PackType) => {
     const newName = "🦖" + Math.random();
@@ -25,6 +28,9 @@ export const TablePacks: FC<PropsType> = ({ cardPacks, page }) => {
   };
   const removeHandler = (id: string) => {
     removePack(id);
+  };
+  const navigateToCardsPageHandler = (packId: string) => {
+    navigate(`/cards/${packId}`);
   };
 
   const createData = useCallback((
@@ -72,6 +78,7 @@ export const TablePacks: FC<PropsType> = ({ cardPacks, page }) => {
               <TableCell align="right">{<>
                 <button onClick={() => removeHandler(p._id)}>Remove</button>
                 <button onClick={() => updateHandler(p)}>Update</button>
+                <button onClick={() => navigateToCardsPageHandler(p._id)}>на стр карточек</button>
               </>
               }</TableCell>
             </TableRow>
