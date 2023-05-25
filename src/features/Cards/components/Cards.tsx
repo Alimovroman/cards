@@ -1,8 +1,13 @@
 import React, { ChangeEvent, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useAddCardMutation, useGetCardsQuery } from "features/Cards/service/cards.api";
+import {
+  useAddCardMutation,
+  useDeleteCardMutation,
+  useGetCardsQuery,
+  useUpdateCardMutation
+} from "features/Cards/service/cards.api";
 import LinearProgress from "@mui/material/LinearProgress";
-import { ArgCreateCardType } from "features/Cards/service/cards.api.types";
+import { ArgCreateCardType, CardType } from "features/Cards/service/cards.api.types";
 import { nanoid } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 import Pagination from "@mui/material/Pagination";
@@ -10,10 +15,17 @@ import s from './Cards.module.css'
 
 const Cards = () => {
   let { packId } = useParams<{ packId: string }>();
-
-
-  const {data, isLoading, refetch} = useGetCardsQuery(packId ?? '')
+  const [page, setPage] = useState(1);
+  const [pageCount, setPageCount] = useState(3);
+  const { data, error, isLoading } = useGetCardsQuery({ packId: packId ?? "", page, pageCount });
   const [addCard, {}] = useAddCardMutation()
+  const [deleteCard] = useDeleteCardMutation()
+  const [updateCard] = useUpdateCardMutation();
+
+  const updateCardHandler = (card: CardType) => {
+    const newCard = { ...card, question: "💚 new question 💚", answer: "🧡 new answer 🧡 " };
+    updateCard(newCard);
+  };
 
   const addCardHandler = () => {
     if (packId) {
@@ -33,9 +45,11 @@ const Cards = () => {
     }
   }
   const changePageHandler = (event: ChangeEvent<unknown>, page: number) => {
-    console.log("page: ", page);
+    setPage(page)
   };
-
+  const removeCardHandler = (cardId: string) => {
+    deleteCard(cardId)
+  }
   if(isLoading) {
     return <LinearProgress color={"primary"} />
   }
@@ -44,7 +58,6 @@ const Cards = () => {
     <div>
       <h1>Cards</h1>
       <button onClick={addCardHandler}>add card</button>
-      <button onClick={refetch}>refetch</button>
       <div>
         {data &&
           data.cards.map((card) => {
@@ -58,6 +71,8 @@ const Cards = () => {
                   <b>Answer: </b>
                   <p>{card.answer}</p>{" "}
                 </div>
+                <button onClick={() => removeCardHandler(card._id)}>delete card</button>
+                <button onClick={() => updateCardHandler(card)}>update card</button>
               </div>
             );
           })}
