@@ -7,7 +7,7 @@ import {
   useUpdateCardMutation
 } from "features/Cards/service/cards.api";
 import LinearProgress from "@mui/material/LinearProgress";
-import { ArgCreateCardType, CardType } from "features/Cards/service/cards.api.types";
+import { ArgCreateCardType, CardType, CustomerError } from "features/Cards/service/cards.api.types";
 import { nanoid } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 import Pagination from "@mui/material/Pagination";
@@ -17,7 +17,17 @@ const Cards = () => {
   let { packId } = useParams<{ packId: string }>();
   const [page, setPage] = useState(1);
   const [pageCount, setPageCount] = useState(3);
-  const { data, error, isLoading } = useGetCardsQuery({ packId: packId ?? "", page, pageCount });
+  const { cards = [], cardsTotalCount, isLoading, error } = useGetCardsQuery({ packId: packId ?? "", page, pageCount },
+    {
+      selectFromResult: ({data, isLoading, error}) => {
+        return {
+          cards: data?.cards,
+          cardsTotalCount: data?.cardsTotalCount,
+          isLoading,
+          error
+        }
+      }
+    });
   const [addCard, {}] = useAddCardMutation()
   const [deleteCard] = useDeleteCardMutation()
   const [updateCard] = useUpdateCardMutation();
@@ -50,8 +60,13 @@ const Cards = () => {
   const removeCardHandler = (cardId: string) => {
     deleteCard(cardId)
   }
+
   if(isLoading) {
     return <LinearProgress color={"primary"} />
+  }
+  if(!!error) {
+    const err = error as CustomerError
+    return <h1 style={{color: 'red'}}>{err.data.error}</h1>
   }
 
   return (
@@ -59,8 +74,7 @@ const Cards = () => {
       <h1>Cards</h1>
       <button onClick={addCardHandler}>add card</button>
       <div>
-        {data &&
-          data.cards.map((card) => {
+        {cards.map((card) => {
             return (
               <div className={s.container} key={card._id}>
                 <div>
@@ -77,7 +91,7 @@ const Cards = () => {
             );
           })}
       </div>
-      <Pagination count={data && data.cardsTotalCount} onChange={changePageHandler} />
+      <Pagination count={cardsTotalCount} onChange={changePageHandler} />
     </div>
   );
 };

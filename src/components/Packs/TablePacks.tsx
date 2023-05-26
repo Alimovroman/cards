@@ -17,9 +17,10 @@ import { useNavigate } from "react-router-dom";
 type PropsType = {
   cardPacks: PackType[] | undefined
   page: number | undefined
+  userId: string | undefined
 }
-export const TablePacks: FC<PropsType> = ({ cardPacks, page }) => {
-  const { updatePack, removePack, sortCardPacks } = useActions(packsThunk);
+export const TablePacks: FC<PropsType> = ({ cardPacks, page, userId }) => {
+  const { updatePack, removePack } = useActions(packsThunk);
   const navigate = useNavigate()
 
   const updateHandler = (pack: PackType) => {
@@ -44,7 +45,7 @@ export const TablePacks: FC<PropsType> = ({ cardPacks, page }) => {
   }, []);
 
   const onSortCards = () => {
-    page && sortCardPacks({ num: 0 });
+
   };
 
   const rows = cardPacks !== undefined
@@ -76,8 +77,8 @@ export const TablePacks: FC<PropsType> = ({ cardPacks, page }) => {
               <TableCell align="right">{p.updated}</TableCell>
               <TableCell align="right">{p.user_name}</TableCell>
               <TableCell align="right">{<>
-                <button onClick={() => removeHandler(p._id)}>Remove</button>
-                <button onClick={() => updateHandler(p)}>Update</button>
+                {p.user_id === userId && <button onClick={() => removeHandler(p._id)}>Remove</button>}
+                {p.user_id === userId && <button onClick={() => updateHandler(p)}>Update</button>}
                 <button onClick={() => navigateToCardsPageHandler(p._id)}>на стр карточек</button>
               </>
               }</TableCell>

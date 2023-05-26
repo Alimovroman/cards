@@ -8,42 +8,42 @@ import {
 } from "components/Packs/packs.api";
 import { authThunks } from "features/auth/auth.slice";
 
-const fetchPacks = createAppAsyncThunk<{packsPage: FetchPacksResponseType }, {page: number}>
+const fetchPacks = createAppAsyncThunk<{ packsPage: FetchPacksResponseType }, {
+  page?: number, userId?: string, min?: number, max?: number, packName?: string
+}>
 ("packs/setPacks", async (arg, thunkAPI) => {
   return thunkTryCatch(thunkAPI, async () => {
-    const res = await packsApi.getPacks(arg!.page);
+    const res = await packsApi.getPacks({
+      page: arg.page,
+      user_id: arg.userId,
+      min: arg.min,
+      max: arg.max,
+      packName: arg.packName
+    });
     return { packsPage: res.data };
   });
 });
-const sortCardPacks = createAppAsyncThunk<{packs: any }, {num: number}>
-("packs/sortCardPacks", async (arg, thunkAPI) => {
-  return thunkTryCatch(thunkAPI, async () => {
-    const res = await packsApi.sortCardPacks(arg.num)
-
-    return { packs: res.data };
-  });
-});
-const addNewPacks = createAppAsyncThunk<{pack: PackType}, ArgCreatePackType>
+const addNewPacks = createAppAsyncThunk<{ pack: PackType }, ArgCreatePackType>
 ("packs/addNewPacks", async (arg, thunkAPI) => {
   return thunkTryCatch(thunkAPI, async () => {
-    const res = await packsApi.addNewPack(arg)
-    return {pack: res.data.newCardsPack}
+    const res = await packsApi.addNewPack(arg);
+    return { pack: res.data.newCardsPack };
   });
 });
-const removePack = createAppAsyncThunk<{packId: string}, string>
+const removePack = createAppAsyncThunk<{ packId: string }, string>
 ("packs/removePacks", async (id, thunkAPI) => {
   return thunkTryCatch(thunkAPI, async () => {
     const res = await packsApi.removePack(id);
-    return {packId: res.data.deletedCardsPack._id}
+    return { packId: res.data.deletedCardsPack._id };
   });
-})
+});
 const updatePack = createAppAsyncThunk<{ pack: PackType }, PackType>
 ("pack/updatePack", async (arg, thunkAPI) => {
   return thunkTryCatch(thunkAPI, async () => {
-    const res = await packsApi.updatePack(arg)
-    return {pack: res.data.updatedCardsPack}
-  })
-})
+    const res = await packsApi.updatePack(arg);
+    return { pack: res.data.updatedCardsPack };
+  });
+});
 
 const slice = createSlice({
   name: "packs",
@@ -53,7 +53,7 @@ const slice = createSlice({
     pageCount: 4,
     cardPacksTotalCount: 2000,
     minCardsCount: 0,
-    maxCardsCount: 100,
+    maxCardsCount: 100
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -68,27 +68,24 @@ const slice = createSlice({
         state.maxCardsCount = packsPage.maxCardsCount;
       })
       .addCase(addNewPacks.fulfilled, (state, action) => {
-        state.cardPacks.unshift(action.payload.pack)
-    })
+        state.cardPacks.unshift(action.payload.pack);
+      })
       .addCase(removePack.fulfilled, (state, action) => {
         const index = state.cardPacks.findIndex((pack) => pack._id === action.payload.packId);
-        if(index !== -1) state.cardPacks.splice(index, 1)
+        if (index !== -1) state.cardPacks.splice(index, 1);
       })
       .addCase(updatePack.fulfilled, (state, action) => {
-        const index = state.cardPacks.findIndex((pack => pack._id === action.payload.pack._id))
-        if(index !== -1) state.cardPacks[index] = action.payload.pack
+        const index = state.cardPacks.findIndex((pack => pack._id === action.payload.pack._id));
+        if (index !== -1) state.cardPacks[index] = action.payload.pack;
 
-      })
-      .addCase(sortCardPacks.fulfilled, (state, action) => {
-        // state.packs = action.payload.packs;
       })
 
       .addCase(authThunks.logout.fulfilled, (state, action) => {
-        state.cardPacks = []
-      })
+        state.cardPacks = [];
+      });
 
   }
 });
 
 export const packsReducer = slice.reducer;
-export const packsThunk = {fetchPacks, sortCardPacks, addNewPacks, updatePack, removePack };
+export const packsThunk = { fetchPacks, addNewPacks, updatePack, removePack };

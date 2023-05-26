@@ -11,6 +11,7 @@ import {
   cardPacksSelector,
   pageSelector
 } from "components/Packs/packs.selector";
+import { userIdSelector } from "features/auth/auth.selector";
 
 
 const Packs = () => {
@@ -18,6 +19,7 @@ const Packs = () => {
   const page = useAppSelector(pageSelector);
   let allPage = useAppSelector(allPageSelector);
   const { fetchPacks, addNewPacks } = useActions(packsThunk);
+  const userId = useAppSelector(userIdSelector)
 
 
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
@@ -46,8 +48,8 @@ const Packs = () => {
           <button onClick={addNewPack}>Add new Pack</button>
         </div>
       </div>
-      <SettingsPacks />
-      <TablePacks cardPacks={cardPacks} page={page} />
+      <SettingsPacks userId={userId}/>
+      <TablePacks cardPacks={cardPacks} page={page} userId={userId}/>
       <div>
         <Stack spacing={2}>
           <Pagination count={allPage} variant="outlined" shape="rounded" color={"primary"} onChange={handleChange} />

@@ -2,6 +2,8 @@ import React, { FC } from "react";
 import style from "components/Packs/Packs.module.css";
 import Box from "@mui/material/Box";
 import Slider from "@mui/material/Slider";
+import { useActions } from "common/hooks";
+import { packsThunk } from "components/Packs/packs.slice";
 
 function valuetext(value: number) {
   return `${value}°C`;
@@ -11,6 +13,7 @@ const minDistance = 10;
 
 export const SliderPacks: FC = () => {
   const [value, setValue] = React.useState<number[]>([20, 37]);
+  const { fetchPacks } = useActions(packsThunk);
   const handleChangeCommitet = (
     event: React.SyntheticEvent | Event,
     newValue: number | number[],
@@ -19,7 +22,7 @@ export const SliderPacks: FC = () => {
     if (!Array.isArray(newValue)) {
       return;
     }
-    console.log(value[0]);
+    fetchPacks({page: 1, min: value[0], max: value[1]})
   };
 
   const handleChange = (

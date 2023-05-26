@@ -30,7 +30,10 @@ export const cardsApi = createApi({
             },
           };
         },
-        providesTags: ['Card']
+        providesTags: (result) =>
+          result
+            ? [...result.cards.map((card) => ({ type: "Card" as const, id: card._id })), "Card"]
+            : ["Card"],
       }),
       addCard: build.mutation<AddCardResponseType, ArgCreateCardType>({
         query: (card) => {
@@ -66,7 +69,7 @@ export const cardsApi = createApi({
             },
           };
         },
-        invalidatesTags: ["Card"],
+        invalidatesTags: (result, error, card) => [{type: "Card", id: card._id }],
       }),
     };
   }

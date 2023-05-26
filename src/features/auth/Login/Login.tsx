@@ -23,7 +23,7 @@ const Login = () => {
       .then((res) => {
         toast.success("Вы успешно залогинились")
         setTimeout(() => {
-          navigate('/')
+          navigate('/packs')
         }, 1500)
 
       })

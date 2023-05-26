@@ -1,20 +1,17 @@
 import { instance } from "common/api";
 
 export const packsApi = {
-  // getPacks: (page: number) => {
-  //   return instance.get<FetchPacksResponseType>(`cards/pack?page=${page}`);
-  // },
-  getPacks: (page: number) => {
-    return instance.get<FetchPacksResponseType>(`cards/pack?page=${page}`, {
+  getPacks: (arg: FetchProps) => {
+    return instance.get<FetchPacksResponseType>(`cards/pack`, {
       params: {
-        //❗Ваш user_id
-        user_id: "6449575b41fe56350487d85c",
+        user_id: arg.user_id,
         pageCount: 20,
+        page: arg.page,
+        min: arg.min,
+        max: arg.max,
+        packName: arg.packName
       },
     });
-  },
-  sortCardPacks: (num: number) => {
-    return instance.get<FetchPacksResponseType>(`cards/pack?sortPacks=${num}cardsCount`);
   },
   addNewPack: (cardsPack: ArgCreatePackType) => {
     return instance.post<CreatePackResponseType>("cards/pack", { cardsPack });
@@ -80,3 +77,10 @@ export type ArgCreatePackType = {
   deckCover?: string;
   private?: boolean;
 };
+type FetchProps = {
+  page?: number
+  user_id?: string
+  min?: number
+  max?: number
+  packName?: string
+}

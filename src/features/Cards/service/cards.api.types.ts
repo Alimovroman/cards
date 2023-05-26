@@ -74,3 +74,15 @@ type CreateUpdateCardType = {
 export type ArgCreateCardType = Omit<CreateUpdateCardType, "_id">;
 export type ArgUpdateCardType = Omit<CreateUpdateCardType, "cardsPack_id">;
 
+export type ErrorDataType = {
+  error: string;
+  errorObject: Object;
+  in: string;
+  info: string;
+}
+
+export type CustomerError = {
+  data: ErrorDataType;
+  status: number;
+};
+
