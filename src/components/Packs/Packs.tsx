@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import style from "./Packs.module.css";
 import { SettingsPacks } from "components/Packs/SettingsPacks";
 import Pagination from "@mui/material/Pagination";
@@ -17,19 +17,27 @@ import { userIdSelector } from "features/auth/auth.selector";
 const Packs = () => {
   const cardPacks = useAppSelector(cardPacksSelector);
   const page = useAppSelector(pageSelector);
-  let allPage = useAppSelector(allPageSelector);
+  const allPage = useAppSelector(allPageSelector);
   const { fetchPacks, addNewPacks } = useActions(packsThunk);
-  const userId = useAppSelector(userIdSelector)
+  const userId = useAppSelector(userIdSelector);
+  const [valueTextInput, setValueTextInput] = useState("");
 
 
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
     fetchPacks({ page: value });
   };
+  const onChangeValueInput = (e: ChangeEvent<HTMLInputElement>) => {
+    setValueTextInput(e.currentTarget.value);
+  };
   const addNewPack = () => {
+    if (valueTextInput === "") {
+      return;
+    }
     const newPack = {
-      name: "🦁" + Math.random()
+      name: "🦁" + valueTextInput
     };
     addNewPacks(newPack);
+    setValueTextInput('')
   };
 
 
@@ -46,10 +54,11 @@ const Packs = () => {
         </div>
         <div>
           <button onClick={addNewPack}>Add new Pack</button>
+          <div><input type={"text"} value={valueTextInput} onChange={onChangeValueInput} placeholder={'New pack'}/></div>
         </div>
       </div>
-      <SettingsPacks userId={userId}/>
-      <TablePacks cardPacks={cardPacks} page={page} userId={userId}/>
+      <SettingsPacks userId={userId} />
+      <TablePacks cardPacks={cardPacks} page={page} userId={userId} />
       <div>
         <Stack spacing={2}>
           <Pagination count={allPage} variant="outlined" shape="rounded" color={"primary"} onChange={handleChange} />

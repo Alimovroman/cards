@@ -9,7 +9,8 @@ export const packsApi = {
         page: arg.page,
         min: arg.min,
         max: arg.max,
-        packName: arg.packName
+        packName: arg.packName,
+        sortPacks: arg.sortPacks
       },
     });
   },
@@ -83,4 +84,5 @@ type FetchProps = {
   min?: number
   max?: number
   packName?: string
+  sortPacks?: string
 }

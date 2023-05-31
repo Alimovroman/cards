@@ -9,7 +9,7 @@ import {
 import { authThunks } from "features/auth/auth.slice";
 
 const fetchPacks = createAppAsyncThunk<{ packsPage: FetchPacksResponseType }, {
-  page?: number, userId?: string, min?: number, max?: number, packName?: string
+  page?: number, userId?: string, min?: number, max?: number, packName?: string, sortPacks?: string
 }>
 ("packs/setPacks", async (arg, thunkAPI) => {
   return thunkTryCatch(thunkAPI, async () => {
@@ -18,7 +18,8 @@ const fetchPacks = createAppAsyncThunk<{ packsPage: FetchPacksResponseType }, {
       user_id: arg.userId,
       min: arg.min,
       max: arg.max,
-      packName: arg.packName
+      packName: arg.packName,
+      sortPacks: arg.sortPacks
     });
     return { packsPage: res.data };
   });
