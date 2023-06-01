@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FC, useState } from "react";
+import React, { ChangeEvent, FC, useCallback, useState } from "react";
 import style from "components/Packs/Packs.module.css";
 import { SliderPacks } from "components/Packs/Slider";
 import { useActions } from "common/hooks";
@@ -12,19 +12,14 @@ export const SettingsPacks: FC<Props> = ({ userId }) => {
   const { fetchPacks } = useActions(packsThunk);
   const [value, setValue] = useState('')
 
-  const updateValue = (e: ChangeEvent<HTMLInputElement>) => {
-    setValue(e?.currentTarget?.value)
-
+  const updateValue = (inputValue: string) => {
+    fetchPacks({packName: inputValue})
   }
-
-   const debounceOnChange = debounce(updateValue, 700)
+   const debounceOnChange = useCallback( debounce(updateValue, 700), [])
 
   const searchPacksOnChange = (e: ChangeEvent<HTMLInputElement>) => {
     setValue(e.currentTarget.value)
-    // if (e.key === 'Enter') {
-    //   fetchPacks({packName: value})
-    //   setValue('')
-    // }
+    debounceOnChange(e.currentTarget.value)
   };
   const showMyPacksHandler = () => {
     fetchPacks({ page: 1, userId });
@@ -37,7 +32,7 @@ export const SettingsPacks: FC<Props> = ({ userId }) => {
       <div className={style.searchBlock}>
         <p>Search</p>
         <div>
-          <input type="text" placeholder="Provide your text" value={value} onChange={debounceOnChange}/>
+          <input type="text" placeholder="Provide your text" value={value} onChange={searchPacksOnChange} />
         </div>
       </div>
       <div>
