@@ -49,12 +49,14 @@ const Packs = () => {
   return (
     <div className={style.packsContainer}>
       <div className={style.headerPacks}>
-        <div>
+        <div className={style.header}>
           Packs List
         </div>
         <div>
-          <button onClick={addNewPack}>Add new Pack</button>
-          <div><input type={"text"} value={valueTextInput} onChange={onChangeValueInput} placeholder={'New pack'}/></div>
+          <button onClick={addNewPack} className={style.buttonAddNewPack}>Add new pack</button>
+          <div>
+            <input type={"text"} value={valueTextInput} onChange={onChangeValueInput} placeholder={'New pack'} className={style.newPackInput}/>
+          </div>
         </div>
       </div>
       <SettingsPacks userId={userId} />

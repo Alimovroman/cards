@@ -42,9 +42,9 @@ export const SliderPacks: FC = () => {
   };
   return (
     <div className={style.sliderBlock}>
-      <p>Number of cards</p>
+      <p className={style.description}>Number of cards</p>
       <div className={style.sliderWrapper}>
-        <span>{value[0]}</span>
+        <span className={style.sliderValue}>{value[0]}</span>
         <div className={style.slider}>
           <Box sx={{ width: 150 }}>
             <Slider
@@ -58,7 +58,7 @@ export const SliderPacks: FC = () => {
             />
           </Box>
         </div>
-        <span>{value[1]}</span>
+        <span className={style.sliderValue}>{value[1]}</span>
       </div>
     </div>
   );
