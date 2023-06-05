@@ -12,7 +12,7 @@ import CheckEmail from "components/CheckEmail/CheckEmail";
 import SetNewPassword from "components/SetNewPassword/SetNewPassword";
 import ForgotPassword from "features/auth/ForgotPassword/ForgotPassword";
 import Profile from "components/Profile/Profile";
-import Packs from "components/Packs/Packs";
+import Packs from "features/Packs/components/Packs";
 import Cards from "features/Cards/components/Cards";
 import Learn from "components/Learn/Learn";
 import { GlobalError } from "common/GlobalError/GlobalError";

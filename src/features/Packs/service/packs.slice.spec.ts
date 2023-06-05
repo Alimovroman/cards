@@ -1,4 +1,4 @@
-import { packsReducer, packsThunk } from "components/Packs/packs.slice";
+import { packsReducer, packsThunk } from "features/Packs/service/packs.slice";
 
 
 describe("packsReducer", () => {

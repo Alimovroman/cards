@@ -2,7 +2,7 @@ import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
 import counterReducer from '../features/counter/counterSlice';
 import { appReducer } from "app/app.slice";
 import { authReducer } from "features/auth/auth.slice";
-import { packsReducer } from "components/Packs/packs.slice";
+import { packsReducer } from "features/Packs/service/packs.slice";
 import { cardsApi } from "features/Cards/service/cards.api";
 import { setupListeners } from "@reduxjs/toolkit/query";
 

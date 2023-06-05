@@ -1,9 +1,9 @@
 import React, { FC } from "react";
-import style from "components/Packs/Packs.module.css";
+import style from "features/Packs/components/Packs.module.css";
 import Box from "@mui/material/Box";
 import Slider from "@mui/material/Slider";
 import { useActions } from "common/hooks";
-import { packsThunk } from "components/Packs/packs.slice";
+import { packsThunk } from "features/Packs/service/packs.slice";
 
 function valuetext(value: number) {
   return `${value}°C`;

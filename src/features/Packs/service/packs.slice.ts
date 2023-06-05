@@ -5,11 +5,11 @@ import {
   FetchPacksResponseType,
   packsApi,
   PackType
-} from "components/Packs/packs.api";
+} from "features/Packs/service/packs.api";
 import { authThunks } from "features/auth/auth.slice";
 
 const fetchPacks = createAppAsyncThunk<{ packsPage: FetchPacksResponseType }, {
-  page?: number, userId?: string, min?: number, max?: number, packName?: string, sortPacks?: string
+  page?: number, userId?: string, min?: number, max?: number, packName?: string, sortPacks?: string, pageCount?: number
 }>
 ("packs/setPacks", async (arg, thunkAPI) => {
   return thunkTryCatch(thunkAPI, async () => {
@@ -19,7 +19,8 @@ const fetchPacks = createAppAsyncThunk<{ packsPage: FetchPacksResponseType }, {
       min: arg.min,
       max: arg.max,
       packName: arg.packName,
-      sortPacks: arg.sortPacks
+      sortPacks: arg.sortPacks,
+      pageCount: arg.pageCount
     });
     return { packsPage: res.data };
   });

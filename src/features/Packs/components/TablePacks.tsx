@@ -6,14 +6,14 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import style from "./Packs.module.css";
-import { packsThunk } from "components/Packs/packs.slice";
+import style from "features/Packs/components/Packs.module.css";
+import { packsThunk } from "features/Packs/service/packs.slice";
 import { useActions } from "common/hooks";
-import { PackType } from "components/Packs/packs.api";
+import { PackType } from "features/Packs/service/packs.api";
 import { useNavigate } from "react-router-dom";
-import removeIcon from "./../../common/images/remove_icon.svg";
-import updateIcon from "./../../common/images/update_icon.svg";
-import learningIcon from "./../../common/images/learning_icon.svg";
+import removeIcon from "common/images/remove_icon.svg";
+import updateIcon from "common/images/update_icon.svg";
+import learningIcon from "common/images/learning_icon.svg";
 
 type PropsType = {
   cardPacks: PackType[] | undefined

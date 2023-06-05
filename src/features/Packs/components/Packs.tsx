@@ -1,17 +1,18 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
-import style from "./Packs.module.css";
-import { SettingsPacks } from "components/Packs/SettingsPacks";
+import style from "features/Packs/components/Packs.module.css";
+import { SettingsPacks } from "features/Packs/components/SettingsPacks";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
-import { TablePacks } from "components/Packs/TablePacks";
+import { TablePacks } from "features/Packs/components/TablePacks";
 import { useActions, useAppSelector } from "common/hooks";
-import { packsThunk } from "components/Packs/packs.slice";
+import { packsThunk } from "features/Packs/service/packs.slice";
 import {
   allPageSelector,
   cardPacksSelector,
   pageSelector
-} from "components/Packs/packs.selector";
+} from "features/Packs/service/packs.selector";
 import { userIdSelector } from "features/auth/auth.selector";
+import { SelectForShowPacks } from "features/Packs/components/SelectForShowPacks";
 
 
 const Packs = () => {
@@ -37,7 +38,7 @@ const Packs = () => {
       name: "🦁" + valueTextInput
     };
     addNewPacks(newPack);
-    setValueTextInput('')
+    setValueTextInput("");
   };
 
 
@@ -55,16 +56,20 @@ const Packs = () => {
         <div>
           <button onClick={addNewPack} className={style.buttonAddNewPack}>Add new pack</button>
           <div>
-            <input type={"text"} value={valueTextInput} onChange={onChangeValueInput} placeholder={'New pack'} className={style.newPackInput}/>
+            <input type={"text"} value={valueTextInput} onChange={onChangeValueInput} placeholder={"New pack"}
+                   className={style.newPackInput} />
           </div>
         </div>
       </div>
       <SettingsPacks userId={userId} />
       <TablePacks cardPacks={cardPacks} page={page} userId={userId} />
-      <div>
+      <div className={style.paginationBlock}>
         <Stack spacing={2}>
           <Pagination count={allPage} variant="outlined" shape="rounded" color={"primary"} onChange={handleChange} />
         </Stack>
+        <div className={style.paginationDescription}>
+          Show {<SelectForShowPacks />} Cards per Page
+        </div>
       </div>
     </div>
   );

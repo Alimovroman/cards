@@ -132,3 +132,14 @@
 .tableButton img {
     width: 17px;
 }
+.paginationBlock {
+    display: flex;
+    align-items: center;
+    margin-top: 40px;
+}
+.paginationDescription {
+    margin-left: 30px;
+    display: flex;
+    align-items: center;
+
+}

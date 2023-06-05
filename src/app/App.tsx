@@ -7,8 +7,8 @@ import { authThunks } from "features/auth/auth.slice";
 import style from "./App.module.css";
 import LinearProgress from "@mui/material/LinearProgress";
 import { Header } from "features/Header/Header";
-import Packs from "components/Packs/Packs";
-import { packsThunk } from "components/Packs/packs.slice";
+import Packs from "features/Packs/components/Packs";
+import { packsThunk } from "features/Packs/service/packs.slice";
 import { isLoadingSelector } from "app/app.selector";
 
 function App() {

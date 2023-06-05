@@ -1,11 +1,11 @@
 import React, { ChangeEvent, FC, useCallback, useState } from "react";
-import style from "components/Packs/Packs.module.css";
-import { SliderPacks } from "components/Packs/Slider";
+import style from "features/Packs/components/Packs.module.css";
+import { SliderPacks } from "features/Packs/components/Slider";
 import { useActions } from "common/hooks";
-import { packsThunk } from "components/Packs/packs.slice";
+import { packsThunk } from "features/Packs/service/packs.slice";
 import debounce  from "lodash.debounce"
-import searchIcon from './../../common/images/search-icon.svg'
-import filterResetIcon from './../../common/images/filter_icon.svg'
+import searchIcon from 'common/images/search-icon.svg'
+import filterResetIcon from 'common/images/filter_icon.svg'
 
 type Props = {
   userId: string | undefined

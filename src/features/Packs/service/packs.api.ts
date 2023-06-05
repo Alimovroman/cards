@@ -5,7 +5,7 @@ export const packsApi = {
     return instance.get<FetchPacksResponseType>(`cards/pack`, {
       params: {
         user_id: arg.user_id,
-        pageCount: 20,
+        pageCount: arg.pageCount,
         page: arg.page,
         min: arg.min,
         max: arg.max,
@@ -85,4 +85,5 @@ type FetchProps = {
   max?: number
   packName?: string
   sortPacks?: string
+  pageCount?: number;
 }

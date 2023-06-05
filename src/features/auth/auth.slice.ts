@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { ArgLoginType, ArgRegisterType, authApi, DataForgot, ProfileType } from "features/auth/auth.api";
 import { createAppAsyncThunk } from "common/utils";
 import { thunkTryCatch } from "common/utils";
-import { packsThunk } from "components/Packs/packs.slice";
+import { packsThunk } from "features/Packs/service/packs.slice";
 
 const register = createAppAsyncThunk<void, ArgRegisterType>
 ("auth/register", async (arg, thunkAPI) => {
