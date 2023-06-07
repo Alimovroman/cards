@@ -55,7 +55,7 @@ const slice = createSlice({
     pageCount: 4,
     cardPacksTotalCount: 2000,
     minCardsCount: 0,
-    maxCardsCount: 100
+    maxCardsCount: 100,
   },
   reducers: {},
   extraReducers: (builder) => {

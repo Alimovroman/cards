@@ -54,16 +54,6 @@ export const TablePacks: FC<PropsType> = ({ cardPacks, page, userId }) => {
     navigate(`/cards/${packId}`);
   };
 
-  const createData = useCallback((
-    name: string,
-    cards: number,
-    lastUpdated: string,
-    createdBy: string,
-    actions: any
-  ) => {
-    return { name, cards, lastUpdated, createdBy, actions };
-  }, []);
-
   const onSortCards = () => {
     fetchPacks({ sortPacks: `${sortParam}cardsCount` });
     setSortParam(sortParam === 0 ? 1 : 0);
@@ -81,21 +71,16 @@ export const TablePacks: FC<PropsType> = ({ cardPacks, page, userId }) => {
     setSortParam(sortParam === 0 ? 1 : 0);
   };
 
-
-  const rows = cardPacks !== undefined
-    ? [...cardPacks]
-    : null;
-  console.log(cardPacks);
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead className={style.tableHead}>
           <TableRow>
             <TableCell onClick={onSortName} className={style.headersTable}>Name</TableCell>
-            <TableCell align="right" onClick={onSortCards} className={style.headersTable}>Cards</TableCell>
-            <TableCell align="right" onClick={onSortUpdated} className={style.headersTable}>Last updated</TableCell>
-            <TableCell align="right" onClick={onSortCreateByName} className={style.headersTable}>Created by</TableCell>
-            <TableCell align="right">Actions</TableCell>
+            <TableCell align="left" onClick={onSortCards} className={style.headersTable}>Cards</TableCell>
+            <TableCell align="left" onClick={onSortUpdated} className={style.headersTable}>Last updated</TableCell>
+            <TableCell align="left" onClick={onSortCreateByName} className={style.headersTable}>Created by</TableCell>
+            <TableCell align="left">Actions</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -111,10 +96,10 @@ export const TablePacks: FC<PropsType> = ({ cardPacks, page, userId }) => {
                   <input type={"text"} autoFocus onKeyDown={(e) => updatePackNameHandler(e, p)} value={valueUpdatePack}
                          onChange={changeValuePackName} />}
               </TableCell>
-              <TableCell align="right">{p.cardsCount}</TableCell>
-              <TableCell align="right">{p.updated}</TableCell>
-              <TableCell align="right">{p.user_name}</TableCell>
-              <TableCell align="right">{<>
+              <TableCell align="left">{p.cardsCount}</TableCell>
+              <TableCell align="left">{p.updated}</TableCell>
+              <TableCell align="left">{p.user_name}</TableCell>
+              <TableCell align="left">{<>
                 {p.user_id === userId &&
                   <>
                     <button onClick={() => navigateToCardsPageHandler(p._id)} className={style.tableButton}>
@@ -128,8 +113,6 @@ export const TablePacks: FC<PropsType> = ({ cardPacks, page, userId }) => {
                     </button>
                   </>
                 }
-                {/*{p.user_id === userId &&}*/}
-                {/*{p.user_id === userId &&}*/}
                 {p.user_id !== userId && p.cardsCount > 0
                   && <button onClick={() => navigateToCardsPageHandler(p._id)} className={style.tableButton}>
                     <img src={learningIcon} alt={"learning"} />
