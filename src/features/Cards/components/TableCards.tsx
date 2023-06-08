@@ -16,10 +16,10 @@ import { userIdSelector } from "features/auth/auth.selector";
 
 type Props = {
   cards: CardType[]
+  userId: string | undefined
 }
 
-export const TableCards: FC<Props> = ({ cards }) => {
-  const userId = useAppSelector(userIdSelector);
+export const TableCards: FC<Props> = ({ cards, userId }) => {
   const [updateCard] = useUpdateCardMutation();
   const [deleteCard] = useDeleteCardMutation();
   const updateCardHandler = (card: CardType) => {
@@ -64,8 +64,6 @@ export const TableCards: FC<Props> = ({ cards }) => {
               </TableCell>
             </TableRow>
           ))}
-
-
         </TableBody>
       </Table>
     </TableContainer>

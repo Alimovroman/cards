@@ -5,6 +5,7 @@ export const cardPacksTotalCountSelector = (state: RootState) => state.packs.car
 export const cardPacksSelector = (state: RootState) => state.packs.cardPacks
 export const pageCountSelector = (state: RootState) => state.packs.pageCount
 export const pageSelector = (state: RootState) => state.packs.page
+export const activePackSelector = (state: RootState) => state.packs.activePack
 export const allPageSelector = createSelector(
   cardPacksTotalCountSelector,
   pageCountSelector,

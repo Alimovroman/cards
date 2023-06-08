@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { createAppAsyncThunk, thunkTryCatch } from "common/utils";
 import {
   ArgCreatePackType,
@@ -56,8 +56,13 @@ const slice = createSlice({
     cardPacksTotalCount: 2000,
     minCardsCount: 0,
     maxCardsCount: 100,
+    activePack: null as null | string
   },
-  reducers: {},
+  reducers: {
+    setPackName: (state, action: PayloadAction<{activePackName: string}>) => {
+      state.activePack = action.payload.activePackName
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchPacks.fulfilled, (state, action) => {
@@ -89,5 +94,6 @@ const slice = createSlice({
   }
 });
 
+export const {setPackName} = slice.actions
 export const packsReducer = slice.reducer;
 export const packsThunk = { fetchPacks, addNewPacks, updatePack, removePack };

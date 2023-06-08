@@ -9,6 +9,8 @@ describe("packsReducer", () => {
     cardPacksTotalCount: 2000,
     minCardsCount: 0,
     maxCardsCount: 100,
+    activePack: null
+
   };
 
   const packsPage = {

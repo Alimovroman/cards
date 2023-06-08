@@ -7,8 +7,8 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import style from "features/Packs/components/Packs.module.css";
-import { packsThunk } from "features/Packs/service/packs.slice";
-import { useActions } from "common/hooks";
+import { packsThunk, setPackName } from "features/Packs/service/packs.slice";
+import { useActions, useAppDispatch } from "common/hooks";
 import { PackType } from "features/Packs/service/packs.api";
 import { useNavigate } from "react-router-dom";
 import removeIcon from "common/images/remove_icon.svg";
@@ -27,6 +27,7 @@ export const TablePacks: FC<PropsType> = ({ cardPacks, page, userId }) => {
   const [isUpdatePack, setIsUpdatePack] = useState(false);
   const [packId, setPackId] = useState("");
   const [valueUpdatePack, setValueUpdatePack] = useState("");
+  const dispatch = useAppDispatch()
 
   const openUpdateInputHandler = (pack: PackType) => {
     setPackId(pack._id);
@@ -50,8 +51,9 @@ export const TablePacks: FC<PropsType> = ({ cardPacks, page, userId }) => {
   const removeHandler = (id: string) => {
     removePack(id);
   };
-  const navigateToCardsPageHandler = (packId: string) => {
+  const navigateToCardsPageHandler = (packId: string, packName: string) => {
     navigate(`/cards/${packId}`);
+    dispatch(setPackName({activePackName: packName}))
   };
 
   const onSortCards = () => {
@@ -102,7 +104,7 @@ export const TablePacks: FC<PropsType> = ({ cardPacks, page, userId }) => {
               <TableCell align="left">{<>
                 {p.user_id === userId &&
                   <>
-                    <button onClick={() => navigateToCardsPageHandler(p._id)} className={style.tableButton}>
+                    <button onClick={() => navigateToCardsPageHandler(p._id, p.name)} className={style.tableButton}>
                       <img src={learningIcon} alt={"learning"} />
                     </button>
                     <button onClick={() => openUpdateInputHandler(p)} className={style.tableButton}>
@@ -114,7 +116,7 @@ export const TablePacks: FC<PropsType> = ({ cardPacks, page, userId }) => {
                   </>
                 }
                 {p.user_id !== userId && p.cardsCount > 0
-                  && <button onClick={() => navigateToCardsPageHandler(p._id)} className={style.tableButton}>
+                  && <button onClick={() => navigateToCardsPageHandler(p._id, p.name)} className={style.tableButton}>
                     <img src={learningIcon} alt={"learning"} />
                   </button>}
               </>

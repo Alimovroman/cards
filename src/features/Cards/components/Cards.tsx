@@ -2,7 +2,7 @@ import React, { ChangeEvent, useEffect, useState } from "react";
 import { NavLink, useParams } from "react-router-dom";
 import {
   useAddCardMutation,
-  useGetCardsQuery,
+  useGetCardsQuery
 } from "features/Cards/service/cards.api";
 import LinearProgress from "@mui/material/LinearProgress";
 import { ArgCreateCardType, CustomerError } from "features/Cards/service/cards.api.types";
@@ -15,27 +15,28 @@ import { TableCards } from "features/Cards/components/TableCards";
 import { useActions, useAppSelector } from "common/hooks";
 import { packsThunk } from "features/Packs/service/packs.slice";
 import { RootState } from "app/store";
+import { activePackSelector } from "features/Packs/service/packs.selector";
+import { userIdSelector } from "features/auth/auth.selector";
 
 const Cards = () => {
-  const {fetchPacks} = useActions(packsThunk)
-  const packs = useAppSelector((state: RootState) => state.packs.cardPacks )
-  const [nameCard, setNameCard] = useState('')
+  const packName = useAppSelector(activePackSelector);
+  const userId = useAppSelector(userIdSelector);
   let { packId } = useParams<{ packId: string }>();
   const [page, setPage] = useState(1);
   const [pageCount, setPageCount] = useState(3);
-  const { cards = [], cardsTotalCount, isLoading, error } = useGetCardsQuery({ packId: packId ?? "", page, pageCount },
+  const { cards = [], cardsTotalCount, isLoading, error, packUserId } = useGetCardsQuery({ packId: packId ?? "", page, pageCount,  },
     {
       selectFromResult: ({ data, isLoading, error }) => {
         return {
           cards: data?.cards,
           cardsTotalCount: data?.cardsTotalCount,
+          packUserId: data?.packUserId,
           isLoading,
           error
         };
       }
     });
   const [addCard, {}] = useAddCardMutation();
-
 
   const addCardHandler = () => {
     if (packId) {
@@ -58,18 +59,6 @@ const Cards = () => {
     setPage(page);
   };
 
-  useEffect(() => {
-    if (packs.length > 0 ) {
-      console.log('зашел');
-      // const pack = packs.filter(pack => pack._id === cards[0].cardsPack_id);
-      console.log(packs);
-      // setNameCard(pack[0].name)
-    } else {
-      console.log('Не зашел');
-      console.log(packs);
-      // fetchPacks({userId: packs[0].user_id})
-    }
-  }, [packs])
 
   if (isLoading) {
     return <LinearProgress color={"primary"} />;
@@ -90,12 +79,16 @@ const Cards = () => {
         </NavLink>
       </div>
       <div className={style.headerBlock}>
-        <div className={style.headerDescription}>{nameCard}</div>
+        <div className={style.headerDescription}>
+          {packName ? packName : "PackName"}
+        </div>
         <div>
-          <button onClick={addCardHandler} className={style.buttonAddCard}>add new card</button>
+          {userId === packUserId &&
+            <button onClick={addCardHandler} className={style.buttonAddCard}>add new card</button>
+          }
         </div>
       </div>
-      <TableCards cards={cards}/>
+      <TableCards cards={cards} userId={userId} />
       <Pagination count={cardsTotalCount} onChange={changePageHandler} />
     </div>
   );
