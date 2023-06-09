@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -11,8 +11,7 @@ import updateIcon from "common/images/update_icon.svg";
 import removeIcon from "common/images/remove_icon.svg";
 import { CardType } from "features/Cards/service/cards.api.types";
 import { useDeleteCardMutation, useUpdateCardMutation } from "features/Cards/service/cards.api";
-import { useAppSelector } from "common/hooks";
-import { userIdSelector } from "features/auth/auth.selector";
+import { FaStar } from "react-icons/fa";
 
 type Props = {
   cards: CardType[]
@@ -20,6 +19,7 @@ type Props = {
 }
 
 export const TableCards: FC<Props> = ({ cards, userId }) => {
+
   const [updateCard] = useUpdateCardMutation();
   const [deleteCard] = useDeleteCardMutation();
   const updateCardHandler = (card: CardType) => {
@@ -29,6 +29,7 @@ export const TableCards: FC<Props> = ({ cards, userId }) => {
   const removeCardHandler = (cardId: string) => {
     deleteCard(cardId);
   };
+
 
   return (
     <TableContainer component={Paper}>
@@ -45,21 +46,23 @@ export const TableCards: FC<Props> = ({ cards, userId }) => {
         <TableBody>
           {cards.map((card) => (
             <TableRow key={card._id} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-              <TableCell  align="left">{card.question}</TableCell>
+              <TableCell align="left">{card.question}</TableCell>
               <TableCell align="left">{card.answer}</TableCell>
               <TableCell align="left">{card.updated}</TableCell>
-              <TableCell align="left">Stars</TableCell>
+              <TableCell align="left">
+                <Stars />
+              </TableCell>
               <TableCell align="right">
                 {card.user_id === userId &&
                   <>
-                  <button className={style.tableButton} onClick={() => updateCardHandler(card)}>
-                    <img src={updateIcon} alt={"update"} />
-                  </button>
-                  <button className={style.tableButton} onClick={() => removeCardHandler(card._id)}>
-                    <img src={removeIcon} alt={"remove"} />
-                  </button>
+                    <button className={style.tableButton} onClick={() => updateCardHandler(card)}>
+                      <img src={updateIcon} alt={"update"} />
+                    </button>
+                    <button className={style.tableButton} onClick={() => removeCardHandler(card._id)}>
+                      <img src={removeIcon} alt={"remove"} />
+                    </button>
 
-                </>
+                  </>
                 }
               </TableCell>
             </TableRow>
@@ -70,3 +73,18 @@ export const TableCards: FC<Props> = ({ cards, userId }) => {
   );
 };
 
+const Stars = () => {
+  const [activeStars, setActiveStars] = useState(0);
+  const activeStarsHandler = (quantity: number) => {
+    setActiveStars(quantity);
+  };
+  return (
+    <div className={style.starsWrapper}>
+      <FaStar style={{ color: activeStars > 0 ? "gold" : "" }} onClick={() => activeStarsHandler(1)} />
+      <FaStar style={{ color: activeStars > 1 ? "gold" : "" }} onClick={() => activeStarsHandler(2)} />
+      <FaStar style={{ color: activeStars > 2 ? "gold" : "" }} onClick={() => activeStarsHandler(3)} />
+      <FaStar style={{ color: activeStars > 3 ? "gold" : "" }} onClick={() => activeStarsHandler(4)} />
+      <FaStar style={{ color: activeStars > 4 ? "gold" : "" }} onClick={() => activeStarsHandler(5)} />
+    </div>
+  );
+};

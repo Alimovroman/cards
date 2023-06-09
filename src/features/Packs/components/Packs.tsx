@@ -12,7 +12,7 @@ import {
   pageSelector
 } from "features/Packs/service/packs.selector";
 import { userIdSelector } from "features/auth/auth.selector";
-import { SelectForShowPacks } from "features/Packs/components/SelectForShowPacks";
+import { SelectForPages } from "common/components/SelectForPages/SelectForPages";
 
 
 const Packs = () => {
@@ -30,6 +30,9 @@ const Packs = () => {
   const onChangeValueInput = (e: ChangeEvent<HTMLInputElement>) => {
     setValueTextInput(e.currentTarget.value);
   };
+  const changePageCount = (pageCount: number) => {
+    fetchPacks({pageCount})
+  }
   const addNewPack = () => {
     if (valueTextInput === "") {
       return;
@@ -68,7 +71,7 @@ const Packs = () => {
           <Pagination count={allPage} variant="outlined" shape="rounded" color={"primary"} onChange={handleChange} />
         </Stack>
         <div className={style.paginationDescription}>
-          Show {<SelectForShowPacks />} Cards per Page
+          Show {<SelectForPages callBack={changePageCount} namePage={'Packs'}/>} Cards per Page
         </div>
       </div>
     </div>

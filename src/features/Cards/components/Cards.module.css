@@ -2,6 +2,7 @@
     width: 85%;
     margin: 0 auto;
 }
+
 .navigation {
     display: flex;
     justify-content: flex-start;
@@ -9,6 +10,7 @@
     padding-top: 24px;
     text-decoration: none;
 }
+
 .navigationDescription {
     font-weight: 400;
     font-size: 14px;
@@ -16,19 +18,22 @@
     color: #000000;
     padding-left: 12px;
 }
+
 .headerBlock {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding-top: 39px;
 }
-.headerDescription{
+
+.headerDescription {
     font-style: normal;
     font-weight: 600;
     font-size: 22px;
     line-height: 27px;
     color: #000000;
 }
+
 .buttonAddCard {
     background: #366EFF;
     box-shadow: 0px 4px 18px rgba(54, 110, 255, 0.35), inset 0px 1px 0px rgba(255, 255, 255, 0.3);
@@ -42,6 +47,7 @@
     padding: 8px 28px;
     border: none;
 }
+
 .container {
     display: flex;
     gap: 100px;
@@ -49,10 +55,30 @@
     text-align: center;
     align-items: center;
 }
+
 .tableHead {
     background-color: #eae5e5;
 }
 
 .tableRow {
     text-align: left;
+}
+
+.starsWrapper {
+    display: flex;
+    justify-content: space-between;
+}
+
+.starsWrapper svg {
+    color: grey;
+}
+.paginationBlock {
+    display: flex;
+    align-items: center;
+    margin-top: 40px;
+}
+.paginationDescription {
+    margin-left: 30px;
+    display: flex;
+    align-items: center;
 }
