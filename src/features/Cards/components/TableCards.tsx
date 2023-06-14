@@ -16,9 +16,10 @@ import { FaStar } from "react-icons/fa";
 type Props = {
   cards: CardType[]
   userId: string | undefined
+  sortQuestion: () => void
 }
 
-export const TableCards: FC<Props> = ({ cards, userId }) => {
+export const TableCards: FC<Props> = ({ cards, userId, sortQuestion }) => {
 
   const [updateCard] = useUpdateCardMutation();
   const [deleteCard] = useDeleteCardMutation();
@@ -30,13 +31,16 @@ export const TableCards: FC<Props> = ({ cards, userId }) => {
     deleteCard(cardId);
   };
 
+  const SortQuestionHandler = () => {
+    sortQuestion()
+  }
 
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead className={style.tableHead}>
           <TableRow>
-            <TableCell className={style.headersTable}>Question</TableCell>
+            <TableCell className={`${style.headersTable} ${style.headerQuestion}`} onClick={SortQuestionHandler}>Question</TableCell>
             <TableCell align="left" className={style.headersTable}>Answer</TableCell>
             <TableCell align="left" className={style.headersTable}>Last updated</TableCell>
             <TableCell align="left" className={style.headersTable}>Grade</TableCell>

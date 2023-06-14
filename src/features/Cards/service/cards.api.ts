@@ -13,39 +13,41 @@ export const cardsApi = createApi({
     baseUrl: baseURL,
     credentials: "include"
   }),
-  tagTypes: ['Card'],
+  tagTypes: ["Card"],
   endpoints: (build) => {
     return {
       // 1 параметр - тип того, что возвращает сервер (ResultType)
       // 2 параметр - тип query аргументов (QueryArg)
       getCards: build.query<FetchCardsResponseType, ArgGetCardsType>({
-        query: ({ packId, page, pageCount }) => {
+        query: ({ packId, page, pageCount, cardQuestion, sortCards }) => {
           return {
             method: "GET",
             url: "cards/card",
             params: {
               cardsPack_id: packId,
               page,
-              pageCount
-            },
+              pageCount,
+              cardQuestion,
+              sortCards
+            }
           };
         },
         providesTags: (result) =>
           result
             ? [...result.cards.map((card) => ({ type: "Card" as const, id: card._id })), "Card"]
-            : ["Card"],
+            : ["Card"]
       }),
       addCard: build.mutation<AddCardResponseType, ArgCreateCardType>({
         query: (card) => {
           return {
-            method: 'post',
+            method: "post",
             url: "cards/card",
             body: {
               card
             }
-          }
+          };
         },
-        invalidatesTags: ['Card']
+        invalidatesTags: ["Card"]
       }),
       deleteCard: build.mutation<DeleteCardResponseType, string>({
         query: (id) => {
@@ -53,11 +55,11 @@ export const cardsApi = createApi({
             method: "DELETE",
             url: "cards/card",
             params: {
-              id,
-            },
+              id
+            }
           };
         },
-        invalidatesTags: ["Card"],
+        invalidatesTags: ["Card"]
       }),
       updateCard: build.mutation<UpdateCardResponseType, ArgUpdateCardType>({
         query: (card) => {
@@ -65,17 +67,17 @@ export const cardsApi = createApi({
             method: "PUT",
             url: "cards/card",
             body: {
-              card,
-            },
+              card
+            }
           };
         },
-        invalidatesTags: (result, error, card) => [{type: "Card", id: card._id }],
-      }),
+        invalidatesTags: (result, error, card) => [{ type: "Card", id: card._id }]
+      })
     };
   }
 });
 
-export const {useGetCardsQuery, useAddCardMutation, useDeleteCardMutation, useUpdateCardMutation} = cardsApi
+export const { useGetCardsQuery, useAddCardMutation, useDeleteCardMutation, useUpdateCardMutation } = cardsApi;
 
 //types
 

@@ -1,0 +1,29 @@
+.description {
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 17px;
+    display: flex;
+    align-items: center;
+    color: #000000;
+}
+.searchInputWrapper {
+    display: inline-flex;
+    background: #FFFFFF;
+    border: 1px solid #D9D9D9;
+    border-radius: 2px;
+}
+.searchInput {
+    width: 413px;
+    height: 36px;
+    left: 136px;
+    top: 192px;
+    border: none;
+}
+.searchInput:focus {
+    outline: none;
+}
+.searchIcon {
+    width: 18px;
+    align-self: center;
+    order: -1;
+}

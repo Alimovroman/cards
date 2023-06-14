@@ -16,30 +16,44 @@ import { useAppSelector } from "common/hooks";
 import { activePackSelector } from "features/Packs/service/packs.selector";
 import { userIdSelector } from "features/auth/auth.selector";
 import { SelectForPages } from "common/components/SelectForPages/SelectForPages";
+import { SearchInput } from "common/components/SearchInput/SearchInput";
 
 const Cards = () => {
+  const [sortParam, setSortParam] = useState<0 | 1 | null>(null);
   const packName = useAppSelector(activePackSelector);
   const userId = useAppSelector(userIdSelector);
   let { packId } = useParams<{ packId: string }>();
+  const [cardQuestion, setCardQuestion] = useState("");
   const [page, setPage] = useState(1);
   const [pageCount, setPageCount] = useState(3);
-  const { cards = [], cardsTotalCount, isLoading, error, packUserId } = useGetCardsQuery({ packId: packId ?? "", page, pageCount,  },
+  const { cards = [], cardsTotalCount, isLoading, error, packUserId } = useGetCardsQuery({
+      packId: packId ?? "",
+      page,
+      pageCount,
+      cardQuestion,
+      sortCards: sortParam ? `${sortParam}answer` : ''
+    },
     {
       selectFromResult: ({ data, isLoading, error }) => {
         return {
           cards: data?.cards,
           cardsTotalCount: data?.cardsTotalCount,
           packUserId: data?.packUserId,
+
           isLoading,
           error
         };
       }
     });
   const [addCard, {}] = useAddCardMutation();
-  const AllPages = cardsTotalCount ? Math.ceil(cardsTotalCount / pageCount) : 0
+  const AllPages = cardsTotalCount ? Math.ceil(cardsTotalCount / pageCount) : 0;
   const changePageCount = (newPageCount: number) => {
-    setPageCount(newPageCount)
-  }
+    setPageCount(newPageCount);
+  };
+
+  const sortQuestion = () => {
+    setSortParam(sortParam === 0 ? 1 : 0);
+  };
 
   const addCardHandler = () => {
     if (packId) {
@@ -62,6 +76,9 @@ const Cards = () => {
     setPage(page);
   };
 
+  const searchCards = (cardQuestion: string) => {
+    setCardQuestion(cardQuestion);
+  };
 
   if (isLoading) {
     return <LinearProgress color={"primary"} />;
@@ -91,11 +108,12 @@ const Cards = () => {
           }
         </div>
       </div>
-      <TableCards cards={cards} userId={userId} />
+      <SearchInput description={"Search"} callBack={searchCards} />
+      <TableCards cards={cards} userId={userId} sortQuestion={sortQuestion}/>
       <div className={style.paginationBlock}>
         <Pagination count={AllPages} onChange={changePageHandler} />
         <div className={style.paginationDescription}>
-          Show {<SelectForPages namePage={'Cards'} callBack={changePageCount}/>} Cards per Page
+          Show {<SelectForPages namePage={"Cards"} callBack={changePageCount} />} Cards per Page
         </div>
       </div>
     </div>

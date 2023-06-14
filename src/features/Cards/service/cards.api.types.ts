@@ -51,9 +51,11 @@ export type UpdateCardResponseType = Omit<CommonCardResponseType, "newCard" | "d
 type CardGradeType = 0 | 1 | 2 | 3 | 4 | 5;
 
 export type ArgGetCardsType = {
-  packId: string;
-  page?: number;
-  pageCount?: number;
+  packId: string
+  page?: number
+  pageCount?: number
+  cardQuestion?: string
+  sortCards?: string
 };
 
 // Просто создаем родительский тип и в дочерних убираем ненужные свойства 🤘

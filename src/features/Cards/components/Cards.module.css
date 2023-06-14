@@ -60,6 +60,10 @@
     background-color: #eae5e5;
 }
 
+.headerQuestion {
+    cursor: pointer;
+}
+
 .tableRow {
     text-align: left;
 }
@@ -72,11 +76,13 @@
 .starsWrapper svg {
     color: grey;
 }
+
 .paginationBlock {
     display: flex;
     align-items: center;
     margin-top: 40px;
 }
+
 .paginationDescription {
     margin-left: 30px;
     display: flex;
