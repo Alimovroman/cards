@@ -13,6 +13,7 @@ import {
 } from "features/Packs/service/packs.selector";
 import { userIdSelector } from "features/auth/auth.selector";
 import { SelectForPages } from "common/components/SelectForPages/SelectForPages";
+import { AddNewPack } from "features/Packs/components/AddNewPack/AddNewPack";
 
 
 const Packs = () => {
@@ -21,27 +22,33 @@ const Packs = () => {
   const allPage = useAppSelector(allPageSelector);
   const { fetchPacks, addNewPacks } = useActions(packsThunk);
   const userId = useAppSelector(userIdSelector);
-  const [valueTextInput, setValueTextInput] = useState("");
+  const [isOpenWindowWithAdd, setIsOpenWindowWithAdd] = useState(false)
 
 
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
     fetchPacks({ page: value });
   };
-  const onChangeValueInput = (e: ChangeEvent<HTMLInputElement>) => {
-    setValueTextInput(e.currentTarget.value);
-  };
+
+  const closeWindowWithAdd = () => {
+    setIsOpenWindowWithAdd(false)
+  }
   const changePageCount = (pageCount: number) => {
     fetchPacks({pageCount})
   }
-  const addNewPack = () => {
-    if (valueTextInput === "") {
+  const openWindowForAddCard = () => {
+    setIsOpenWindowWithAdd(true)
+  }
+  const addNewPack = (nameNewPack: string) => {
+
+
+    if (nameNewPack === "") {
       return;
     }
     const newPack = {
-      name: "🦁" + valueTextInput
+      name: "🦁" + nameNewPack
     };
     addNewPacks(newPack);
-    setValueTextInput("");
+    setIsOpenWindowWithAdd(false)
   };
 
 
@@ -57,11 +64,8 @@ const Packs = () => {
           Packs List
         </div>
         <div>
-          <button onClick={addNewPack} className={style.buttonAddNewPack}>Add new pack</button>
-          <div>
-            <input type={"text"} value={valueTextInput} onChange={onChangeValueInput} placeholder={"New pack"}
-                   className={style.newPackInput} />
-          </div>
+          <button onClick={openWindowForAddCard} className={style.buttonAddNewPack}>Add new pack</button>
+          {isOpenWindowWithAdd && <AddNewPack closeWindow={closeWindowWithAdd} callBack={addNewPack}/>}
         </div>
       </div>
       <SettingsPacks userId={userId} />
