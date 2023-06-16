@@ -14,7 +14,7 @@ type Props = {
 export const AddNewPack: FC<Props> = ({ closeWindow, callBack }) => {
   const [value, setValue] = useState("");
 
-  const addNewCard = () => {
+  const addNewPackHandler = () => {
     callBack(value);
   };
   const onChangeValue = (e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
@@ -47,7 +47,7 @@ export const AddNewPack: FC<Props> = ({ closeWindow, callBack }) => {
           <Button variant="outlined" size="small" onClick={closeWindow} className={style.buttonCansel}>
             Cansel
           </Button>
-          <Button variant="contained" size="small" onClick={addNewCard} className={style.buttonSave}>
+          <Button variant="contained" size="small" onClick={addNewPackHandler} className={style.buttonSave}>
             Save
           </Button>
         </div>
