@@ -18,6 +18,7 @@ import { userIdSelector } from "features/auth/auth.selector";
 import { SelectForPages } from "common/components/SelectForPages/SelectForPages";
 import { SearchInput } from "common/components/SearchInput/SearchInput";
 import { AddNewCard } from "features/Cards/components/AddNewCard/AddNewCard";
+import { BurgerMenu } from "features/Cards/components/BurgerMenu/BurgerMenu";
 
 const Cards = () => {
   const [sortParam, setSortParam] = useState<0 | 1 | null>(null);
@@ -111,7 +112,7 @@ const Cards = () => {
       </div>
       <div className={style.headerBlock}>
         <div className={style.headerDescription}>
-          {packName ? packName : "Pack name"}
+          {packName ? packName : "Pack name"}: {<BurgerMenu />}
         </div>
         <div>
           {userId === packUserId &&

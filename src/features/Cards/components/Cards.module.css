@@ -27,6 +27,8 @@
 }
 
 .headerDescription {
+    display: flex;
+    justify-content: flex-start;
     font-style: normal;
     font-weight: 600;
     font-size: 22px;
