@@ -2,23 +2,6 @@
     width: 85%;
     margin: 0 auto;
 }
-
-.navigation {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    padding-top: 24px;
-    text-decoration: none;
-}
-
-.navigationDescription {
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 24px;
-    color: #000000;
-    padding-left: 12px;
-}
-
 .headerBlock {
     display: flex;
     justify-content: space-between;

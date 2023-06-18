@@ -36,7 +36,7 @@ export const BurgerMenu = () => {
         onClick={handleClick}
         className={style.buttonBurgerMenu}
       >
-        <MoreVertOutlinedIcon className={style.iconBurgerMenu}/>
+        <MoreVertOutlinedIcon className={style.iconBurgerMenu} />
       </Button>
       <Menu
         id="basic-menu"

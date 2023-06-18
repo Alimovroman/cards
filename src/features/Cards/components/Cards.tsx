@@ -19,12 +19,13 @@ import { SelectForPages } from "common/components/SelectForPages/SelectForPages"
 import { SearchInput } from "common/components/SearchInput/SearchInput";
 import { AddNewCard } from "features/Cards/components/AddNewCard/AddNewCard";
 import { BurgerMenu } from "features/Cards/components/BurgerMenu/BurgerMenu";
+import { NavigationToPackList } from "common/components/NavigationToPackList/NavigationToPackList";
 
 const Cards = () => {
   const [sortParam, setSortParam] = useState<0 | 1 | null>(null);
   const packName = useAppSelector(activePackSelector);
   const userId = useAppSelector(userIdSelector);
-  const [isOpenWindowWithAddCard, setIsOpenWindowWithAddCard] = useState(false)
+  const [isOpenWindowWithAddCard, setIsOpenWindowWithAddCard] = useState(false);
   let { packId } = useParams<{ packId: string }>();
   const [cardQuestion, setCardQuestion] = useState("");
   const [page, setPage] = useState(1);
@@ -34,7 +35,7 @@ const Cards = () => {
       page,
       pageCount,
       cardQuestion,
-      sortCards: sortParam ? `${sortParam}answer` : ''
+      sortCards: sortParam ? `${sortParam}answer` : ""
     },
     {
       selectFromResult: ({ data, isLoading, error }) => {
@@ -54,8 +55,8 @@ const Cards = () => {
     setPageCount(newPageCount);
   };
   const closeWindowWithAdd = () => {
-    setIsOpenWindowWithAddCard(false)
-  }
+    setIsOpenWindowWithAddCard(false);
+  };
   const sortQuestion = () => {
     setSortParam(sortParam === 0 ? 1 : 0);
   };
@@ -66,7 +67,7 @@ const Cards = () => {
       const newCard: ArgCreateCardType = {
         cardsPack_id: packId,
         question: "🐱 " + question,
-        answer: "🐙 " +answer
+        answer: "🐙 " + answer
       };
       addCard(newCard).unwrap()
         .then((res) => {
@@ -78,10 +79,10 @@ const Cards = () => {
         });
     }
 
-  }
+  };
 
   const addCardHandler = () => {
-    setIsOpenWindowWithAddCard(true)
+    setIsOpenWindowWithAddCard(true);
 
   };
   const changePageHandler = (event: ChangeEvent<unknown>, page: number) => {
@@ -102,14 +103,7 @@ const Cards = () => {
 
   return (
     <div className={style.cardsBlock}>
-      <div>
-        <NavLink to={"/packs"} className={style.navigation}>
-          <img src={arrowIcon} alt={"arrow_icon"} />
-          <div className={style.navigationDescription}>
-            Back to Pack List
-          </div>
-        </NavLink>
-      </div>
+      <NavigationToPackList />
       <div className={style.headerBlock}>
         <div className={style.headerDescription}>
           {packName ? packName : "Pack name"}: {<BurgerMenu />}
@@ -118,11 +112,11 @@ const Cards = () => {
           {userId === packUserId &&
             <button onClick={addCardHandler} className={style.buttonAddCard}>add new card</button>
           }
-          {isOpenWindowWithAddCard && <AddNewCard closeWindow={closeWindowWithAdd} callBack={addNewCard}/>}
+          {isOpenWindowWithAddCard && <AddNewCard closeWindow={closeWindowWithAdd} callBack={addNewCard} />}
         </div>
       </div>
       <SearchInput description={"Search"} callBack={searchCards} />
-      <TableCards cards={cards} userId={userId} sortQuestion={sortQuestion}/>
+      <TableCards cards={cards} userId={userId} sortQuestion={sortQuestion} />
       <div className={style.paginationBlock}>
         <Pagination count={AllPages} onChange={changePageHandler} />
         <div className={style.paginationDescription}>
