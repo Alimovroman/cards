@@ -2,7 +2,7 @@ import * as React from 'react';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import { useState } from "react";
+import { FC, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import MoreVertOutlinedIcon from '@mui/icons-material/MoreVertOutlined';
 import style from './BurgerMenu.module.css'
@@ -10,7 +10,11 @@ import learnIcon from 'common/images/learning_icon.svg'
 import deleteIcon from 'common/images/remove_icon.svg'
 import updateIcon from 'common/images/update_icon.svg'
 
-export const BurgerMenu = () => {
+type Props = {
+  packId: string | undefined
+}
+
+export const BurgerMenu: FC<Props> = ({packId}) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const navigate = useNavigate();
@@ -22,7 +26,7 @@ export const BurgerMenu = () => {
     setAnchorEl(null);
   };
   const learnHandler = () => {
-    navigate('/learn')
+    navigate(`/learn/${packId}`)
     handleClose()
   }
 

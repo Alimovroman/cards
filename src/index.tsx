@@ -61,7 +61,7 @@ const router = createBrowserRouter([
         element: <Cards />
       },
       {
-        path: "learn",
+        path: "learn/:packId",
         element: <Learn />
       }
     ]

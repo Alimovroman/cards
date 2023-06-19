@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useCallback, useEffect, useState } from "react";
 import { NavLink, useParams } from "react-router-dom";
 import {
   useAddCardMutation,
@@ -12,19 +12,21 @@ import Pagination from "@mui/material/Pagination";
 import style from "./Cards.module.css";
 import arrowIcon from "./../../../common/images/arrow_left_icon.svg";
 import { TableCards } from "features/Cards/components/TableCards";
-import { useAppSelector } from "common/hooks";
-import { activePackSelector } from "features/Packs/service/packs.selector";
+import { useActions, useAppSelector } from "common/hooks";
+import { activePackSelector, cardPacksSelector } from "features/Packs/service/packs.selector";
 import { userIdSelector } from "features/auth/auth.selector";
 import { SelectForPages } from "common/components/SelectForPages/SelectForPages";
 import { SearchInput } from "common/components/SearchInput/SearchInput";
 import { AddNewCard } from "features/Cards/components/AddNewCard/AddNewCard";
 import { BurgerMenu } from "features/Cards/components/BurgerMenu/BurgerMenu";
 import { NavigationToPackList } from "common/components/NavigationToPackList/NavigationToPackList";
+import { packsThunk } from "features/Packs/service/packs.slice";
 
 const Cards = () => {
   const [sortParam, setSortParam] = useState<0 | 1 | null>(null);
-  const packName = useAppSelector(activePackSelector);
   const userId = useAppSelector(userIdSelector);
+  const cardPack = useAppSelector(cardPacksSelector)
+
   const [isOpenWindowWithAddCard, setIsOpenWindowWithAddCard] = useState(false);
   let { packId } = useParams<{ packId: string }>();
   const [cardQuestion, setCardQuestion] = useState("");
@@ -49,6 +51,9 @@ const Cards = () => {
         };
       }
     });
+  const packActive = cardPack.filter(cardPack => cardPack._id === packId)
+
+  const {fetchPacks} = useActions(packsThunk)
   const [addCard, {}] = useAddCardMutation();
   const AllPages = cardsTotalCount ? Math.ceil(cardsTotalCount / pageCount) : 0;
   const changePageCount = (newPageCount: number) => {
@@ -81,6 +86,8 @@ const Cards = () => {
 
   };
 
+
+
   const addCardHandler = () => {
     setIsOpenWindowWithAddCard(true);
 
@@ -93,6 +100,13 @@ const Cards = () => {
     setCardQuestion(cardQuestion);
   };
 
+  useEffect(() => {
+    console.log(1);
+    if(cards.length > 0 ) {
+      fetchPacks({userId: cards[0].user_id})
+    }
+  }, [cards])
+
   if (isLoading) {
     return <LinearProgress color={"primary"} />;
   }
@@ -101,12 +115,13 @@ const Cards = () => {
     return <h1 style={{ color: "red" }}>{err.data.error}</h1>;
   }
 
+  // console.log(packActive[0].name);
   return (
     <div className={style.cardsBlock}>
       <NavigationToPackList />
       <div className={style.headerBlock}>
         <div className={style.headerDescription}>
-          {packName ? packName : "Pack name"}: {<BurgerMenu />}
+          {packActive.length > 0 ? packActive[0].name : "Pack name"}: {<BurgerMenu packId={packId}/>}
         </div>
         <div>
           {userId === packUserId &&
