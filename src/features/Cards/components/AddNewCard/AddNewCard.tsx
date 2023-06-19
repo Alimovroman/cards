@@ -21,6 +21,7 @@ export const AddNewCard: FC<Props> = ({callBack, closeWindow}) => {
   }
   const addNewCardHandler = () => {
     callBack(valueQuestion, valueAnswer);
+    closeWindow()
   };
 
   return (

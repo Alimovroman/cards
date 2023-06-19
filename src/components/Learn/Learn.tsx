@@ -1,23 +1,46 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { NavigationToPackList } from "common/components/NavigationToPackList/NavigationToPackList";
 import style from './Learn.module.css'
 import Button from '@mui/material/Button';
 import { RadioButtonsGroup } from "features/Cards/components/AddNewCard/RadioButtonsGroup";
 import { useParams } from "react-router-dom";
-import { useAppSelector } from "common/hooks";
+import { useActions, useAppSelector } from "common/hooks";
 import { cardPacksSelector } from "features/Packs/service/packs.selector";
+import { useGetCardsQuery } from "features/Cards/service/cards.api";
+import { packsThunk } from "features/Packs/service/packs.slice";
 
 const Learn = () => {
   let { packId } = useParams<{ packId: string }>();
   const cardPack = useAppSelector(cardPacksSelector)
+  const { cards = [], isLoading, error, packUserId } = useGetCardsQuery({
+      packId: packId ?? "",
+    },
+    {
+      selectFromResult: ({ data, isLoading, error }) => {
+        return {
+          cards: data?.cards,
+          packUserId: data?.packUserId,
+          isLoading,
+          error
+        };
+      }
+    });
   const packActive = cardPack.filter(cardPack => cardPack._id === packId)
+  const {fetchPacks} = useActions(packsThunk)
+  const [packName, setPackName] = useState('')
 
-  // useEffect(() => {
-  //   console.log(1);
-  //   if(cards.length > 0 ) {
-  //     fetchPacks({userId: cards[0].user_id})
-  //   }
-  // }, [cards])
+  console.log(packActive);
+  useEffect(() => {
+    if(cards.length > 0 ) {
+      fetchPacks({userId: packUserId})
+    }
+  }, [cards])
+
+  useEffect(() => {
+    if (packActive.length > 0) {
+      setPackName(packActive[0].name)
+    }
+  },[packActive] )
 
   return (
     <div>
@@ -25,7 +48,7 @@ const Learn = () => {
       <div className={style.mainContentWrapper}>
         <div className={style.mainContent}>
           <div className={style.packName}>
-            Learn Pack Name
+            Learn {packName}
           </div>
           <div className={style.description}>
             <div>

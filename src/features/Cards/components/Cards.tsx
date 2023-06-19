@@ -101,9 +101,8 @@ const Cards = () => {
   };
 
   useEffect(() => {
-    console.log(1);
     if(cards.length > 0 ) {
-      fetchPacks({userId: cards[0].user_id})
+      fetchPacks({userId: packUserId})
     }
   }, [cards])
 
@@ -115,7 +114,6 @@ const Cards = () => {
     return <h1 style={{ color: "red" }}>{err.data.error}</h1>;
   }
 
-  // console.log(packActive[0].name);
   return (
     <div className={style.cardsBlock}>
       <NavigationToPackList />
