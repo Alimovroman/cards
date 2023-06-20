@@ -26,10 +26,20 @@
     margin-left: -30px;
 }
 .description {
+    margin-bottom: 35px;
+}
+.showAnswerButtonWrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     margin-bottom: 48px;
 }
+.answerWrapper {
+    width: 100%;
+}
 .answer {
-    padding-top: 12px;
+    padding-bottom: 12px;
 }
 .learnBlock {
     margin-bottom: 68px;
@@ -47,7 +57,7 @@
     border-radius: 30px;
     background: #D7D8EF;
 }
-.buttonNext {
+.buttonNext, .showAnswerButton {
     width: 187px;
     height: 36px;
     background: #21268F;
