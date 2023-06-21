@@ -9,12 +9,16 @@ import style from './BurgerMenu.module.css'
 import learnIcon from 'common/images/learning_icon.svg'
 import deleteIcon from 'common/images/remove_icon.svg'
 import updateIcon from 'common/images/update_icon.svg'
+import { useActions } from "common/hooks";
+import { packsThunk } from "features/Packs/service/packs.slice";
 
 type Props = {
   packId: string | undefined
+  showUpdateModal: () => void
+  showRemoveModal: () => void
 }
 
-export const BurgerMenu: FC<Props> = ({packId}) => {
+export const BurgerMenu: FC<Props> = ({packId, showUpdateModal, showRemoveModal}) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const navigate = useNavigate();
@@ -28,6 +32,16 @@ export const BurgerMenu: FC<Props> = ({packId}) => {
   const learnHandler = () => {
     navigate(`/learn/${packId}`)
     handleClose()
+  }
+  const removeHandler = () => {
+    showRemoveModal()
+    // packId && removePack(packId)
+    handleClose()
+    // navigate(`/packs`)
+  }
+  const updateHandler = () => {
+    handleClose()
+    showUpdateModal()
   }
 
   return (
@@ -52,11 +66,11 @@ export const BurgerMenu: FC<Props> = ({packId}) => {
           'aria-labelledby': 'basic-button',
         }}
       >
-        <MenuItem onClick={handleClose}  className={style.ItemBurgerMenu}>
+        <MenuItem onClick={updateHandler}  className={style.ItemBurgerMenu}>
           <img src={updateIcon} alt={'update'} />
           Edit
         </MenuItem>
-        <MenuItem onClick={handleClose} className={style.ItemBurgerMenu}>
+        <MenuItem onClick={removeHandler} className={style.ItemBurgerMenu}>
           <img src={deleteIcon} alt={'delete'} />
           Delete
         </MenuItem>

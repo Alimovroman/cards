@@ -36,30 +36,13 @@
 .textFieldWrapper {
     display: flex;
     justify-content: center;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-start;
     margin-top: 35px;
     margin-bottom: 29px;
+    margin-left: 24px;
 }
-.textField {
-    width: 347px;
-    font-style: normal;
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 24px;
-    color: #000000;
-}
-.checkBox {
-    font-style: normal;
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 20px;
-    text-align: center;
-    letter-spacing: 0.01em;
-    color: #000000;
-    opacity: 0.8;
-    padding-left: 24px;
-    margin-bottom: 35px;
-}
+
 .buttonsBlock {
     display: flex;
     align-items: center;
@@ -81,7 +64,8 @@
     opacity: 0.8;
 }
 .buttonSave {
-    width: 127px;
+    /*width: 127px;*/
+    padding: 0 28px;
     height: 36px;
     background: #366EFF;
     box-shadow: 0px 4px 18px rgba(54, 110, 255, 0.35), inset 0px 1px 0px rgba(255, 255, 255, 0.3);

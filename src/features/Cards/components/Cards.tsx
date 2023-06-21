@@ -1,5 +1,5 @@
-import React, { ChangeEvent, useCallback, useEffect, useState } from "react";
-import { NavLink, useParams } from "react-router-dom";
+import React, { ChangeEvent, useCallback, useEffect, useMemo, useState } from "react";
+import { NavLink, useNavigate, useParams } from "react-router-dom";
 import {
   useAddCardMutation,
   useGetCardsQuery
@@ -21,12 +21,40 @@ import { AddNewCard } from "features/Cards/components/AddNewCard/AddNewCard";
 import { BurgerMenu } from "features/Cards/components/BurgerMenu/BurgerMenu";
 import { NavigationToPackList } from "common/components/NavigationToPackList/NavigationToPackList";
 import { packsThunk } from "features/Packs/service/packs.slice";
+import { Modal } from "features/Cards/components/Modal/Modal";
+import TextField from "@mui/material/TextField";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+
+
+export const styleChildren = {
+  width: "347px",
+  fontStyle: "normal",
+  fontWeight: "500",
+  fontSize: "16px",
+  lineHeight: "24px",
+  color: "#000000"
+};
+export const styleCheckBox = {
+  fontStyle: 'normal',
+  fontWeight: '500',
+  fontSize: '16px',
+  lineHeight: '20px',
+  textAlign: 'center',
+  letterSpacing: '0.01em',
+  color: '#000000',
+  opacity: '0.8',
+  marginTop: '30px'
+}
+
 
 const Cards = () => {
+
   const [sortParam, setSortParam] = useState<0 | 1 | null>(null);
   const userId = useAppSelector(userIdSelector);
-  const cardPack = useAppSelector(cardPacksSelector)
-
+  const cardPack = useAppSelector(cardPacksSelector);
+  const [isShowUpdateModal, setIsShowUpdateModal] = useState(false);
+  const[isShowRemoveModal, setIsShowRemoveModal] = useState(false)
   const [isOpenWindowWithAddCard, setIsOpenWindowWithAddCard] = useState(false);
   let { packId } = useParams<{ packId: string }>();
   const [cardQuestion, setCardQuestion] = useState("");
@@ -51,9 +79,12 @@ const Cards = () => {
         };
       }
     });
-  const packActive = cardPack.filter(cardPack => cardPack._id === packId)
-
-  const {fetchPacks} = useActions(packsThunk)
+  const packActive = useMemo(() => {
+    return cardPack.filter(cardPack => cardPack._id === packId);
+  }, [cardPack])
+  const [valueUpdateInput, setValueUpdateInput] = useState( '')
+  const navigate = useNavigate();
+  const { fetchPacks, updatePack, removePack } = useActions(packsThunk);
   const [addCard, {}] = useAddCardMutation();
   const AllPages = cardsTotalCount ? Math.ceil(cardsTotalCount / pageCount) : 0;
   const changePageCount = (newPageCount: number) => {
@@ -85,13 +116,31 @@ const Cards = () => {
     }
 
   };
-
-
-
+  const onChangeValueUpdateInput = (e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+    setValueUpdateInput(e.currentTarget.value)
+  }
+  const showUpdateModal = () => {
+    setIsShowUpdateModal(true);
+  };
+  const showRemoveModal = () => {
+    setIsShowRemoveModal(true)
+  }
+  const closeModal = () => {
+    setIsShowUpdateModal(false);
+    // setIsShowRemoveModal(false)
+  };
   const addCardHandler = () => {
     setIsOpenWindowWithAddCard(true);
 
   };
+  const removePackCallBack = () => {
+    packId && removePack(packId)
+    navigate(`/packs`)
+  }
+  const updatePackCallBack = () => {
+    updatePack({ ...packActive[0], name: valueUpdateInput })
+    setIsShowUpdateModal(false)
+  }
   const changePageHandler = (event: ChangeEvent<unknown>, page: number) => {
     setPage(page);
   };
@@ -101,10 +150,15 @@ const Cards = () => {
   };
 
   useEffect(() => {
-    if(cards.length > 0 ) {
-      fetchPacks({userId: packUserId})
+    if (cards.length > 0) {
+      fetchPacks({ userId: packUserId });
     }
-  }, [cards])
+  }, [cards]);
+  useEffect(() => {
+    if (packActive.length > 0) {
+      setValueUpdateInput(packActive[0].name)
+    }
+  }, [packActive])
 
   if (isLoading) {
     return <LinearProgress color={"primary"} />;
@@ -119,7 +173,11 @@ const Cards = () => {
       <NavigationToPackList />
       <div className={style.headerBlock}>
         <div className={style.headerDescription}>
-          {packActive.length > 0 ? packActive[0].name : "Pack name"}: {<BurgerMenu packId={packId}/>}
+          {
+            packActive.length > 0
+              ? packActive[0].name
+              : "Pack name"
+          }: {<BurgerMenu packId={packId} showUpdateModal={showUpdateModal} showRemoveModal={showRemoveModal}/>}
         </div>
         <div>
           {userId === packUserId &&
@@ -128,6 +186,26 @@ const Cards = () => {
           {isOpenWindowWithAddCard && <AddNewCard closeWindow={closeWindowWithAdd} callBack={addNewCard} />}
         </div>
       </div>
+      {
+        isShowUpdateModal && <Modal closeModal={closeModal} description={"Edit pack"} nameButton={"Save Changes"} callback={updatePackCallBack}>
+          <TextField
+            sx={styleChildren}
+            id="standard-read-only-input"
+            label="Question"
+            defaultValue="New name"
+            variant="standard"
+            value={valueUpdateInput}
+            onChange={onChangeValueUpdateInput}
+          />
+            <FormControlLabel sx={styleCheckBox} control={<Checkbox defaultChecked />} label="Private pack" />
+        </Modal>
+      }
+      {
+        isShowRemoveModal && <Modal nameButton={'Delete Pack'} description={'Delete Pack'} closeModal={() => setIsShowRemoveModal(false)} callback={removePackCallBack}>
+            <div>Do you really want to remove Pack Name?</div>
+            <div>All cards will be deleted.</div>
+        </Modal>
+      }
       <SearchInput description={"Search"} callBack={searchCards} />
       <TableCards cards={cards} userId={userId} sortQuestion={sortQuestion} />
       <div className={style.paginationBlock}>

@@ -13,7 +13,11 @@ import {
 } from "features/Packs/service/packs.selector";
 import { userIdSelector } from "features/auth/auth.selector";
 import { SelectForPages } from "common/components/SelectForPages/SelectForPages";
-import { AddNewPack } from "features/Packs/components/AddNewPack/AddNewPack";
+import { Modal } from "features/Cards/components/Modal/Modal";
+import TextField from "@mui/material/TextField";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import { styleCheckBox, styleChildren } from "features/Cards/components/Cards";
 
 
 const Packs = () => {
@@ -23,6 +27,7 @@ const Packs = () => {
   const { fetchPacks, addNewPacks } = useActions(packsThunk);
   const userId = useAppSelector(userIdSelector);
   const [isOpenWindowWithAdd, setIsOpenWindowWithAdd] = useState(false)
+  const [valueAddPackInput, setValueAddPackInput] = useState('Pack name')
 
 
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
@@ -38,19 +43,18 @@ const Packs = () => {
   const openWindowForAddCard = () => {
     setIsOpenWindowWithAdd(true)
   }
-  const addNewPack = (nameNewPack: string) => {
+  const addNewPack = () => {
 
-
-    if (nameNewPack === "") {
-      return;
-    }
     const newPack = {
-      name: "🦁" + nameNewPack
+      name: "🦁" + valueAddPackInput
     };
     addNewPacks(newPack);
     setIsOpenWindowWithAdd(false)
+    setValueAddPackInput('Pack name')
   };
-
+const onChangeValuePackInput = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  setValueAddPackInput(e.currentTarget.value)
+}
 
   useEffect(() => {
     // dispatch(packsThunk.fetchPacks({ page: 1 }));
@@ -65,7 +69,25 @@ const Packs = () => {
         </div>
         <div>
           <button onClick={openWindowForAddCard} className={style.buttonAddNewPack}>Add new pack</button>
-          {isOpenWindowWithAdd && <AddNewPack closeWindow={closeWindowWithAdd} callBack={addNewPack}/>}
+          {
+            isOpenWindowWithAdd &&
+            <Modal nameButton={'Add New Pack'}
+                   description={'Add New Pack'}
+                   closeModal={() => setIsOpenWindowWithAdd(false)}
+                   callback={addNewPack} >
+              <TextField
+                sx={styleChildren}
+                id="standard-read-only-input"
+                label="Name Pack"
+                defaultValue="Name Pack"
+                variant="standard"
+                value={valueAddPackInput}
+                onChange={onChangeValuePackInput}
+              />
+              <FormControlLabel sx={styleCheckBox} control={<Checkbox defaultChecked />} label="Private pack" />
+            </Modal>
+            // <AddNewPack closeWindow={closeWindowWithAdd} callBack={addNewPack}/>
+          }
         </div>
       </div>
       <SettingsPacks userId={userId} />

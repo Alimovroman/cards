@@ -43,9 +43,12 @@ const Learn = () => {
   }
 
   useEffect(() => {
-    setQuestion(cards[cardCount].question)
-    setAnswer(cards[cardCount].answer)
+    if (cards.length > 0) {
+      setQuestion(cards[cardCount].question)
+      setAnswer(cards[cardCount].answer)
+    }
   }, [cardCount])
+
   useEffect(() => {
     if (cards.length > 0) {
       fetchPacks({ userId: packUserId });
