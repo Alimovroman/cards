@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { ChangeEvent, FC, useState } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -12,6 +12,8 @@ import removeIcon from "common/images/remove_icon.svg";
 import { CardType } from "features/Cards/service/cards.api.types";
 import { useDeleteCardMutation, useUpdateCardMutation } from "features/Cards/service/cards.api";
 import { FaStar } from "react-icons/fa";
+import { Modal } from "features/Cards/components/Modal/Modal";
+import TextField from "@mui/material/TextField";
 
 type Props = {
   cards: CardType[]
@@ -19,14 +21,45 @@ type Props = {
   sortQuestion: () => void
 }
 
-export const TableCards: FC<Props> = ({ cards, userId, sortQuestion }) => {
+const styleTextField = {
+  width: '347px',
+  fontStyle: 'normal',
+  fontWeight: '500',
+  fontSize: '16px',
+  lineHeight: '24px',
+  color: '#000000',
+}
 
+export const TableCards: FC<Props> = ({ cards, userId, sortQuestion }) => {
+  const [cardActive, setCardActive] = useState<CardType | null>(null)
+  const [valueQuestion, setValueQuestion] = useState('')
+  const [valueAnswer, setValueAnswer] = useState('')
+  const [isShowWindowUpdatePack, setIsShowWindowUpdatePack] = useState(false)
   const [updateCard] = useUpdateCardMutation();
   const [deleteCard] = useDeleteCardMutation();
-  const updateCardHandler = (card: CardType) => {
-    const newCard = { ...card, question: "💚 new question 💚", answer: "🧡 new answer 🧡 " };
-    updateCard(newCard);
+  const onChangeValueQuestion = (e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+    setValueQuestion(e.currentTarget.value)
+  }
+  const onChangeValueAnswer = (e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+    setValueAnswer(e.currentTarget.value)
+  }
+  const openWindowUpdateCar = (card: CardType) => {
+    setIsShowWindowUpdatePack(true)
+    setCardActive(card)
+    setValueAnswer(card.answer)
+    setValueQuestion(card.question)
+
   };
+  const updateCardHandler = () => {
+    console.log(cardActive);
+    if (cardActive) {
+      const newCard = { ...cardActive, question: valueQuestion, answer: valueAnswer };
+      updateCard(newCard);
+    }
+    setIsShowWindowUpdatePack(false)
+    setValueAnswer('')
+    setValueQuestion('')
+  }
   const removeCardHandler = (cardId: string) => {
     deleteCard(cardId);
   };
@@ -37,6 +70,27 @@ export const TableCards: FC<Props> = ({ cards, userId, sortQuestion }) => {
 
   return (
     <TableContainer component={Paper}>
+      {isShowWindowUpdatePack && <Modal nameButton={'Edit Card'} description={'Save Changes'} closeModal={() => setIsShowWindowUpdatePack(false)} callback={updateCardHandler}>
+        <TextField
+          sx={styleTextField}
+          id="standard-read-only-input"
+          label="Question"
+          defaultValue="Name question"
+          variant="standard"
+          value={valueQuestion}
+          onChange={onChangeValueQuestion}
+        />
+        <TextField
+          sx={{marginTop: '30px', ...styleTextField}}
+          id="standard-read-only-input"
+          label="Answer"
+          defaultValue="Answer"
+          variant="standard"
+          value={valueAnswer}
+          onChange={onChangeValueAnswer}
+        />
+      </Modal>
+      }
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead className={style.tableHead}>
           <TableRow>
@@ -56,10 +110,11 @@ export const TableCards: FC<Props> = ({ cards, userId, sortQuestion }) => {
               <TableCell align="left">
                 <Stars />
               </TableCell>
+
               <TableCell align="right">
                 {card.user_id === userId &&
                   <>
-                    <button className={style.tableButton} onClick={() => updateCardHandler(card)}>
+                    <button className={style.tableButton} onClick={() => openWindowUpdateCar(card)}>
                       <img src={updateIcon} alt={"update"} />
                     </button>
                     <button className={style.tableButton} onClick={() => removeCardHandler(card._id)}>

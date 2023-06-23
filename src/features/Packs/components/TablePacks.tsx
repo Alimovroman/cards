@@ -14,6 +14,12 @@ import { useNavigate } from "react-router-dom";
 import removeIcon from "common/images/remove_icon.svg";
 import updateIcon from "common/images/update_icon.svg";
 import learningIcon from "common/images/learning_icon.svg";
+import { Modal } from "features/Cards/components/Modal/Modal";
+import login from "features/auth/Login/Login";
+import TextField from "@mui/material/TextField";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import { styleCheckBox, styleChildren } from "features/Cards/components/Cards";
 
 type PropsType = {
   cardPacks: PackType[] | undefined
@@ -21,32 +27,33 @@ type PropsType = {
   userId: string | undefined
 }
 export const TablePacks: FC<PropsType> = ({ cardPacks, page, userId }) => {
+  const [valueUpdateInput, setValueUpdateInput] = useState( '')
   const { updatePack, removePack, fetchPacks } = useActions(packsThunk);
   const navigate = useNavigate();
   const [sortParam, setSortParam] = useState<0 | 1>(0);
   const [isUpdatePack, setIsUpdatePack] = useState(false);
   const [packId, setPackId] = useState("");
-  const [valueUpdatePack, setValueUpdatePack] = useState("");
   const dispatch = useAppDispatch()
+
+  const onChangeValueUpdateInput = (e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+    setValueUpdateInput(e.currentTarget.value)
+  }
 
   const openUpdateInputHandler = (pack: PackType) => {
     setPackId(pack._id);
     setIsUpdatePack(true);
+    setValueUpdateInput(pack.name)
+    // alert(1)
   };
-  const updatePackNameHandler = (e: KeyboardEvent<HTMLInputElement>, pack: PackType) => {
-    if (e.key === "Enter") {
-      const newName = "🦖" + valueUpdatePack;
-      updatePack({ ...pack, name: newName })
+  const updatePackNameHandler = (pack: PackType) => {
+      updatePack({ ...pack, name: valueUpdateInput })
         .unwrap()
         .then(() => {
           fetchPacks({});
         });
-      setValueUpdatePack("");
       setIsUpdatePack(false);
-    }
-  };
-  const changeValuePackName = (e: ChangeEvent<HTMLInputElement>) => {
-    setValueUpdatePack(e.currentTarget.value);
+      setValueUpdateInput('')
+
   };
   const removeHandler = (id: string) => {
     removePack(id);
@@ -92,11 +99,25 @@ export const TablePacks: FC<PropsType> = ({ cardPacks, page, userId }) => {
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
               <TableCell component="th" scope="row">
-                {p._id !== packId && p.name}
-                {!isUpdatePack && p._id === packId && p.name}
-                {isUpdatePack && p._id === packId &&
-                  <input type={"text"} autoFocus onKeyDown={(e) => updatePackNameHandler(e, p)} value={valueUpdatePack}
-                         onChange={changeValuePackName} />}
+                {p.name}
+                {
+                  isUpdatePack && p._id === packId &&  <Modal nameButton={'Edit Pack'} description={'Save Changes'} closeModal={() => setIsUpdatePack(false)} callback={() => updatePackNameHandler(p)}>
+                    <TextField
+                      sx={styleChildren}
+                      id="standard-read-only-input"
+                      label="Pack Name"
+                      defaultValue="New name"
+                      variant="standard"
+                      value={valueUpdateInput}
+                      onChange={onChangeValueUpdateInput}
+                    />
+                    <FormControlLabel sx={styleCheckBox} control={<Checkbox defaultChecked />} label="Private pack" />
+                  </Modal>
+                }
+                {/*{!isUpdatePack && p._id === packId && p.name}*/}
+                {/*{isUpdatePack && p._id === packId &&*/}
+                {/*  <input type={"text"} autoFocus onKeyDown={(e) => updatePackNameHandler(e, p)} value={valueUpdatePack}*/}
+                {/*         onChange={changeValuePackName} />}*/}
               </TableCell>
               <TableCell align="left">{p.cardsCount}</TableCell>
               <TableCell align="left">{p.updated}</TableCell>
