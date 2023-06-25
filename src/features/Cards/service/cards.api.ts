@@ -3,8 +3,8 @@ import { baseURL } from "common/api";
 import {
   AddCardResponseType,
   ArgCreateCardType,
-  ArgGetCardsType, ArgUpdateCardType, DeleteCardResponseType,
-  FetchCardsResponseType, UpdateCardResponseType
+  ArgGetCardsType, ArgUpdateCardType, ArgUpdateGradeType, DeleteCardResponseType,
+  FetchCardsResponseType, UpdateCardResponseType, UpdateGradeResponseType
 } from "features/Cards/service/cards.api.types";
 
 export const cardsApi = createApi({
@@ -72,12 +72,30 @@ export const cardsApi = createApi({
           };
         },
         invalidatesTags: (result, error, card) => [{ type: "Card", id: card._id }]
+      }),
+      updateGrade: build.mutation<UpdateGradeResponseType, ArgUpdateGradeType>({
+        query: (gradeCard) => {
+          return {
+            method: "PUT",
+            url: "cards/grade",
+            body: {
+              ...gradeCard
+            }
+          };
+        },
+        invalidatesTags: (result, error, card) => [{ type: "Card", id: card.card_id }]
       })
     };
   }
 });
 
-export const { useGetCardsQuery, useAddCardMutation, useDeleteCardMutation, useUpdateCardMutation } = cardsApi;
+export const {
+  useGetCardsQuery,
+  useAddCardMutation,
+  useDeleteCardMutation,
+  useUpdateCardMutation,
+  useUpdateGradeMutation
+} = cardsApi;
 
 //types
 

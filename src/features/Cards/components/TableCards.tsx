@@ -22,32 +22,32 @@ type Props = {
 }
 
 const styleTextField = {
-  width: '347px',
-  fontStyle: 'normal',
-  fontWeight: '500',
-  fontSize: '16px',
-  lineHeight: '24px',
-  color: '#000000',
-}
+  width: "347px",
+  fontStyle: "normal",
+  fontWeight: "500",
+  fontSize: "16px",
+  lineHeight: "24px",
+  color: "#000000"
+};
 
 export const TableCards: FC<Props> = ({ cards, userId, sortQuestion }) => {
-  const [cardActive, setCardActive] = useState<CardType | null>(null)
-  const [valueQuestion, setValueQuestion] = useState('')
-  const [valueAnswer, setValueAnswer] = useState('')
-  const [isShowWindowUpdatePack, setIsShowWindowUpdatePack] = useState(false)
+  const [cardActive, setCardActive] = useState<CardType | null>(null);
+  const [valueQuestion, setValueQuestion] = useState("");
+  const [valueAnswer, setValueAnswer] = useState("");
+  const [isShowWindowUpdatePack, setIsShowWindowUpdatePack] = useState(false);
   const [updateCard] = useUpdateCardMutation();
   const [deleteCard] = useDeleteCardMutation();
   const onChangeValueQuestion = (e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-    setValueQuestion(e.currentTarget.value)
-  }
+    setValueQuestion(e.currentTarget.value);
+  };
   const onChangeValueAnswer = (e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-    setValueAnswer(e.currentTarget.value)
-  }
+    setValueAnswer(e.currentTarget.value);
+  };
   const openWindowUpdateCar = (card: CardType) => {
-    setIsShowWindowUpdatePack(true)
-    setCardActive(card)
-    setValueAnswer(card.answer)
-    setValueQuestion(card.question)
+    setIsShowWindowUpdatePack(true);
+    setCardActive(card);
+    setValueAnswer(card.answer);
+    setValueQuestion(card.question);
 
   };
   const updateCardHandler = () => {
@@ -56,45 +56,49 @@ export const TableCards: FC<Props> = ({ cards, userId, sortQuestion }) => {
       const newCard = { ...cardActive, question: valueQuestion, answer: valueAnswer };
       updateCard(newCard);
     }
-    setIsShowWindowUpdatePack(false)
-    setValueAnswer('')
-    setValueQuestion('')
-  }
+    setIsShowWindowUpdatePack(false);
+    setValueAnswer("");
+    setValueQuestion("");
+  };
   const removeCardHandler = (cardId: string) => {
     deleteCard(cardId);
   };
 
   const SortQuestionHandler = () => {
-    sortQuestion()
-  }
+    sortQuestion();
+  };
+
 
   return (
     <TableContainer component={Paper}>
-      {isShowWindowUpdatePack && <Modal nameButton={'Edit Card'} description={'Save Changes'} closeModal={() => setIsShowWindowUpdatePack(false)} callback={updateCardHandler}>
-        <TextField
-          sx={styleTextField}
-          id="standard-read-only-input"
-          label="Question"
-          defaultValue="Name question"
-          variant="standard"
-          value={valueQuestion}
-          onChange={onChangeValueQuestion}
-        />
-        <TextField
-          sx={{marginTop: '30px', ...styleTextField}}
-          id="standard-read-only-input"
-          label="Answer"
-          defaultValue="Answer"
-          variant="standard"
-          value={valueAnswer}
-          onChange={onChangeValueAnswer}
-        />
-      </Modal>
+      {isShowWindowUpdatePack &&
+        <Modal nameButton={"Edit Card"} description={"Save Changes"} closeModal={() => setIsShowWindowUpdatePack(false)}
+               callback={updateCardHandler}>
+          <TextField
+            sx={styleTextField}
+            id="standard-read-only-input"
+            label="Question"
+            defaultValue="Name question"
+            variant="standard"
+            value={valueQuestion}
+            onChange={onChangeValueQuestion}
+          />
+          <TextField
+            sx={{ marginTop: "30px", ...styleTextField }}
+            id="standard-read-only-input"
+            label="Answer"
+            defaultValue="Answer"
+            variant="standard"
+            value={valueAnswer}
+            onChange={onChangeValueAnswer}
+          />
+        </Modal>
       }
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead className={style.tableHead}>
           <TableRow>
-            <TableCell className={`${style.headersTable} ${style.headerQuestion}`} onClick={SortQuestionHandler}>Question</TableCell>
+            <TableCell className={`${style.headersTable} ${style.headerQuestion}`}
+                       onClick={SortQuestionHandler}>Question</TableCell>
             <TableCell align="left" className={style.headersTable}>Answer</TableCell>
             <TableCell align="left" className={style.headersTable}>Last updated</TableCell>
             <TableCell align="left" className={style.headersTable}>Grade</TableCell>
@@ -108,7 +112,7 @@ export const TableCards: FC<Props> = ({ cards, userId, sortQuestion }) => {
               <TableCell align="left">{card.answer}</TableCell>
               <TableCell align="left">{card.updated}</TableCell>
               <TableCell align="left">
-                <Stars />
+                <Stars grade={card.grade} />
               </TableCell>
 
               <TableCell align="right">
@@ -132,18 +136,22 @@ export const TableCards: FC<Props> = ({ cards, userId, sortQuestion }) => {
   );
 };
 
-const Stars = () => {
-  const [activeStars, setActiveStars] = useState(0);
-  const activeStarsHandler = (quantity: number) => {
-    setActiveStars(quantity);
-  };
+type PropsStars = {
+  grade: number
+}
+
+const Stars: FC<PropsStars> = ({ grade }) => {
+  // const [activeStars, setActiveStars] = useState(0);
+  // const activeStarsHandler = (quantity: number) => {
+  //   setActiveStars(quantity);
+  // };
   return (
     <div className={style.starsWrapper}>
-      <FaStar style={{ color: activeStars > 0 ? "gold" : "" }} onClick={() => activeStarsHandler(1)} />
-      <FaStar style={{ color: activeStars > 1 ? "gold" : "" }} onClick={() => activeStarsHandler(2)} />
-      <FaStar style={{ color: activeStars > 2 ? "gold" : "" }} onClick={() => activeStarsHandler(3)} />
-      <FaStar style={{ color: activeStars > 3 ? "gold" : "" }} onClick={() => activeStarsHandler(4)} />
-      <FaStar style={{ color: activeStars > 4 ? "gold" : "" }} onClick={() => activeStarsHandler(5)} />
+      <FaStar style={{ color: grade > 0 ? "gold" : "" }} />
+      <FaStar style={{ color: grade > 1 ? "gold" : "" }} />
+      <FaStar style={{ color: grade > 2 ? "gold" : "" }} />
+      <FaStar style={{ color: grade > 3 ? "gold" : "" }} />
+      <FaStar style={{ color: grade > 4 ? "gold" : "" }} />
     </div>
   );
 };

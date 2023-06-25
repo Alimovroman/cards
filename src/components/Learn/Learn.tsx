@@ -6,18 +6,21 @@ import { RadioButtonsGroup } from "components/Learn/RadioButtonsGroup";
 import { useParams } from "react-router-dom";
 import { useActions, useAppSelector } from "common/hooks";
 import { cardPacksSelector } from "features/Packs/service/packs.selector";
-import { useGetCardsQuery } from "features/Cards/service/cards.api";
+import { useGetCardsQuery, useUpdateGradeMutation } from "features/Cards/service/cards.api";
 import { packsThunk } from "features/Packs/service/packs.slice";
 
 const Learn = () => {
-  const [cardCount, setCardCount] = useState(0)
-  const [question, setQuestion] = useState('')
-  const [answer, setAnswer] = useState('')
+  const [cardId, setCardId] = useState("");
+  const [valueGrade, setValueGrade] = useState(1);
+  const [cardCount, setCardCount] = useState(0);
+  const [question, setQuestion] = useState("");
+  const [answer, setAnswer] = useState("");
   const [isShowAnswer, setIsShowAnswer] = useState(false);
   let { packId } = useParams<{ packId: string }>();
   const cardPack = useAppSelector(cardPacksSelector);
   const { cards = [], isLoading, error, packUserId } = useGetCardsQuery({
-      packId: packId ?? ""
+      packId: packId ?? "",
+      pageCount: 100
     },
     {
       selectFromResult: ({ data, isLoading, error }) => {
@@ -29,31 +32,39 @@ const Learn = () => {
         };
       }
     });
+  const [updateGrade] = useUpdateGradeMutation();
   const packActive = cardPack.filter(cardPack => cardPack._id === packId);
   const { fetchPacks } = useActions(packsThunk);
   const [packName, setPackName] = useState("");
+
+  const changeValueGrade = (newValue: number) => {
+    setValueGrade(newValue);
+  };
 
   const showAnswerHandler = () => {
     setIsShowAnswer(true);
   };
   const nextCardHandler = () => {
-    const cardLength = cards.length - 1
-    setCardCount(count => count === cardLength ? 0 : count + 1)
+    const cardLength = cards.length - 1;
+    setCardCount(count => count === cardLength ? 0 : count + 1);
     setIsShowAnswer(false);
-  }
+    updateGrade({ card_id: cardId, grade: valueGrade });
+  };
 
   useEffect(() => {
     if (cards.length > 0) {
-      setQuestion(cards[cardCount].question)
-      setAnswer(cards[cardCount].answer)
+      setQuestion(cards[cardCount].question);
+      setAnswer(cards[cardCount].answer);
+      setCardId(cards[cardCount]._id);
     }
-  }, [cardCount])
+  }, [cardCount]);
 
   useEffect(() => {
     if (cards.length > 0) {
       fetchPacks({ userId: packUserId });
-      setQuestion(cards[cardCount].question)
-      setAnswer(cards[cardCount].answer)
+      setQuestion(cards[cardCount].question);
+      setAnswer(cards[cardCount].answer);
+      setCardId(cards[cardCount]._id);
     }
   }, [cards]);
 
@@ -93,7 +104,7 @@ const Learn = () => {
                 Answer: {answer}
               </div>
               <div className={style.learnBlock}>
-                <RadioButtonsGroup />
+                <RadioButtonsGroup callBack={changeValueGrade} />
               </div>
               <div className={style.buttons}>
                 <Button variant="outlined" size="small" className={style.buttonCansel}>

@@ -47,6 +47,15 @@ export type AddCardResponseType = Omit<CommonCardResponseType, "deletedCard" | "
 export type DeleteCardResponseType = Omit<CommonCardResponseType, "newCard" | "updatedCard">;
 export type UpdateCardResponseType = Omit<CommonCardResponseType, "newCard" | "deletedCard">;
 
+export type UpdateGradeResponseType = {
+  _id: string
+  cardsPack_id: string
+  card_id: string
+  user_id: string
+  grade: number
+  shots: number
+}
+
 // arguments
 type CardGradeType = 0 | 1 | 2 | 3 | 4 | 5;
 
@@ -75,6 +84,11 @@ type CreateUpdateCardType = {
 
 export type ArgCreateCardType = Omit<CreateUpdateCardType, "_id">;
 export type ArgUpdateCardType = Omit<CreateUpdateCardType, "cardsPack_id">;
+
+export type ArgUpdateGradeType = {
+  grade: number
+  card_id: string
+}
 
 export type ErrorDataType = {
   error: string;
