@@ -36,16 +36,16 @@ export const styleChildren = {
   color: "#000000"
 };
 export const styleCheckBox = {
-  fontStyle: 'normal',
-  fontWeight: '500',
-  fontSize: '16px',
-  lineHeight: '20px',
-  textAlign: 'center',
-  letterSpacing: '0.01em',
-  color: '#000000',
-  opacity: '0.8',
-  marginTop: '30px'
-}
+  fontStyle: "normal",
+  fontWeight: "500",
+  fontSize: "16px",
+  lineHeight: "20px",
+  textAlign: "center",
+  letterSpacing: "0.01em",
+  color: "#000000",
+  opacity: "0.8",
+  marginTop: "30px"
+};
 
 
 const Cards = () => {
@@ -54,7 +54,7 @@ const Cards = () => {
   const userId = useAppSelector(userIdSelector);
   const cardPack = useAppSelector(cardPacksSelector);
   const [isShowUpdateModal, setIsShowUpdateModal] = useState(false);
-  const[isShowRemoveModal, setIsShowRemoveModal] = useState(false)
+  const [isShowRemoveModal, setIsShowRemoveModal] = useState(false);
   const [isOpenWindowWithAddCard, setIsOpenWindowWithAddCard] = useState(false);
   let { packId } = useParams<{ packId: string }>();
   const [cardQuestion, setCardQuestion] = useState("");
@@ -81,8 +81,8 @@ const Cards = () => {
     });
   const packActive = useMemo(() => {
     return cardPack.filter(cardPack => cardPack._id === packId);
-  }, [cardPack])
-  const [valueUpdateInput, setValueUpdateInput] = useState( '')
+  }, [cardPack]);
+  const [valueUpdateInput, setValueUpdateInput] = useState("");
   const navigate = useNavigate();
   const { fetchPacks, updatePack, removePack } = useActions(packsThunk);
   const [addCard, {}] = useAddCardMutation();
@@ -117,14 +117,14 @@ const Cards = () => {
 
   };
   const onChangeValueUpdateInput = (e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-    setValueUpdateInput(e.currentTarget.value)
-  }
+    setValueUpdateInput(e.currentTarget.value);
+  };
   const showUpdateModal = () => {
     setIsShowUpdateModal(true);
   };
   const showRemoveModal = () => {
-    setIsShowRemoveModal(true)
-  }
+    setIsShowRemoveModal(true);
+  };
   const closeModal = () => {
     setIsShowUpdateModal(false);
     // setIsShowRemoveModal(false)
@@ -134,13 +134,13 @@ const Cards = () => {
 
   };
   const removePackCallBack = () => {
-    packId && removePack(packId)
-    navigate(`/packs`)
-  }
+    packId && removePack(packId);
+    navigate(`/packs`);
+  };
   const updatePackCallBack = () => {
-    updatePack({ ...packActive[0], name: valueUpdateInput })
-    setIsShowUpdateModal(false)
-  }
+    updatePack({ ...packActive[0], name: valueUpdateInput });
+    setIsShowUpdateModal(false);
+  };
   const changePageHandler = (event: ChangeEvent<unknown>, page: number) => {
     setPage(page);
   };
@@ -156,9 +156,9 @@ const Cards = () => {
   }, [cards]);
   useEffect(() => {
     if (packActive.length > 0) {
-      setValueUpdateInput(packActive[0].name)
+      setValueUpdateInput(packActive[0].name);
     }
-  }, [packActive])
+  }, [packActive]);
 
   if (isLoading) {
     return <LinearProgress color={"primary"} />;
@@ -177,7 +177,7 @@ const Cards = () => {
             packActive.length > 0
               ? packActive[0].name
               : "Pack name"
-          }: {<BurgerMenu packId={packId} showUpdateModal={showUpdateModal} showRemoveModal={showRemoveModal}/>}
+          }: {<BurgerMenu packId={packId} showUpdateModal={showUpdateModal} showRemoveModal={showRemoveModal} />}
         </div>
         <div>
           {userId === packUserId &&
@@ -187,7 +187,8 @@ const Cards = () => {
         </div>
       </div>
       {
-        isShowUpdateModal && <Modal closeModal={closeModal} description={"Edit pack"} nameButton={"Save Changes"} callback={updatePackCallBack}>
+        isShowUpdateModal && <Modal closeModal={closeModal} description={"Edit pack"} nameButton={"Save Changes"}
+                                    callback={updatePackCallBack}>
           <TextField
             sx={styleChildren}
             id="standard-read-only-input"
@@ -197,16 +198,20 @@ const Cards = () => {
             value={valueUpdateInput}
             onChange={onChangeValueUpdateInput}
           />
-            <FormControlLabel sx={styleCheckBox} control={<Checkbox defaultChecked />} label="Private pack" />
+          <FormControlLabel sx={styleCheckBox} control={<Checkbox defaultChecked />} label="Private pack" />
         </Modal>
       }
       {
-        isShowRemoveModal && <Modal nameButton={'Delete Pack'} description={'Delete Pack'} closeModal={() => setIsShowRemoveModal(false)} callback={removePackCallBack}>
-            <div>Do you really want to remove Pack Name?</div>
-            <div>All cards will be deleted.</div>
+        isShowRemoveModal &&
+        <Modal nameButton={"Delete Pack"} description={"Delete Pack"} closeModal={() => setIsShowRemoveModal(false)}
+               callback={removePackCallBack}>
+          <div>Do you really want to remove Pack Name?</div>
+          <div>All cards will be deleted.</div>
         </Modal>
       }
-      <SearchInput description={"Search"} callBack={searchCards} />
+      <div className={style.searchWrapper}>
+        <SearchInput description={"Search"} callBack={searchCards} />
+      </div>
       <TableCards cards={cards} userId={userId} sortQuestion={sortQuestion} />
       <div className={style.paginationBlock}>
         <Pagination count={AllPages} onChange={changePageHandler} />

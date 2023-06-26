@@ -33,6 +33,9 @@
     border: none;
 }
 
+.searchWrapper {
+    margin-bottom: 20px;
+}
 .container {
     display: flex;
     gap: 100px;
@@ -52,7 +55,15 @@
 .tableRow {
     text-align: left;
 }
-
+.tableButton {
+    border: none;
+    background: #FFFFFF;
+    cursor: pointer;
+    margin-right: 7px;
+}
+.tableButton img {
+    width: 20px;
+}
 .starsWrapper {
     display: flex;
     justify-content: space-between;
