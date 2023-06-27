@@ -55,9 +55,14 @@ const slice = createSlice({
   name: "auth",
   initialState: {
     profile: null as ProfileType | null,
-    isLoggedIn: false
+    isLoggedIn: false,
+    isInitialized: false
   },
-  reducers: {},
+  reducers: {
+    initializeApp: (state) => {
+      state.isInitialized = true
+    }
+  },
   extraReducers: (builder) => {
     builder
       // .addCase(register.fulfilled, (state, action) => {

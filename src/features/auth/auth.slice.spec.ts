@@ -3,7 +3,8 @@ import { authReducer, authThunks } from "features/auth/auth.slice";
 describe("authReducer", () => {
   const initialState = {
     profile: null,
-    isLoggedIn: false
+    isLoggedIn: false,
+    isInitialized: false
   };
 
   it("should login work correctly and return profile", () => {
