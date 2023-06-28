@@ -26,9 +26,10 @@ const ForgotPassword = () => {
       <form onSubmit={handleSubmit(onSubmit)} className={styleAuth.form}>
         <div className={styleAuth.title}>forgot password</div>
         <div>
-          <input {...register("email", { required: true })} />
+          <input placeholder={'Email'} {...register("email", { required: true })} />
         </div>
         {errors.email && <span>This field is required</span>}
+        <div className={styleAuth.description}>Enter your email address and we will send you further instructions</div>
         <div>
           <button className={styleAuth.button}>Send</button>
         </div>

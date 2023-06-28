@@ -9,3 +9,9 @@
 .checkBox input {
     margin-top: 30px;
 }
+a {
+    text-decoration: none;
+}
+.signUp {
+    margin-bottom: 20px;
+}

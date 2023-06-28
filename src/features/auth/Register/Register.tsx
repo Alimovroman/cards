@@ -33,15 +33,15 @@ const Register = () => {
       <form onSubmit={handleSubmit(onSubmit)} className={styleAuth.form}>
         <div className={styleAuth.title}>Register</div>
         <div>
-          <input {...register("email", { required: true })} />
+          <input placeholder={'Email'} {...register("email", { required: true })} />
         </div>
         {errors.email && <span>This field is required</span>}
         <div>
-          <input type={"password"} {...register("password", { required: true })} />
+          <input type={"password"} placeholder={'Password'} {...register("password", { required: true })} />
         </div>
         {errors.password && <span>This field is required</span>}
         <div>
-          <input type={"password"} {...register("passwordDupl", { required: true })} />
+          <input type={"password"} placeholder={'Confirm password'} {...register("passwordDupl", { required: true })} />
         </div>
         {errors.passwordDupl && <span>This field is required</span>}
         <div>

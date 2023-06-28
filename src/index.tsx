@@ -11,7 +11,7 @@ import Register from "features/auth/Register/Register";
 import CheckEmail from "components/CheckEmail/CheckEmail";
 import SetNewPassword from "components/SetNewPassword/SetNewPassword";
 import ForgotPassword from "features/auth/ForgotPassword/ForgotPassword";
-import Profile from "components/Profile/Profile";
+import Profile from "features/Profile/Profile";
 import Packs from "features/Packs/components/Packs";
 import Cards from "features/Cards/components/Cards";
 import Learn from "components/Learn/Learn";

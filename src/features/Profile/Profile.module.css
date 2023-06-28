@@ -1,0 +1,14 @@
+.root {
+    margin-left: 30px;
+    margin-top: 30px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+.avatar{
+    width: 250px;
+    height: 250px;
+}
+.nameBlock {
+    margin-left: 15px;
+}

@@ -21,6 +21,7 @@ import { styleCheckBox, styleChildren } from "features/Cards/components/Cards";
 
 
 const Packs = () => {
+  const [pageCount, setPageCount] = useState(4)
   const cardPacks = useAppSelector(cardPacksSelector);
   const page = useAppSelector(pageSelector);
   const allPage = useAppSelector(allPageSelector);
@@ -31,14 +32,15 @@ const Packs = () => {
 
 
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
-    fetchPacks({ page: value });
+    fetchPacks({ page: value, pageCount});
   };
 
   const closeWindowWithAdd = () => {
     setIsOpenWindowWithAdd(false)
   }
-  const changePageCount = (pageCount: number) => {
-    fetchPacks({pageCount})
+  const changePageCount = (newPageCount: number) => {
+    fetchPacks({pageCount: newPageCount})
+    setPageCount(newPageCount)
   }
   const openWindowForAddCard = () => {
     setIsOpenWindowWithAdd(true)

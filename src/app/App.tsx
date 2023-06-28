@@ -10,6 +10,8 @@ import { Header } from "features/Header/Header";
 import { packsThunk } from "features/Packs/service/packs.slice";
 import { isLoadingSelector } from "app/app.selector";
 import { isInitializedSelector, isLoggedInSelector } from "features/auth/auth.selector";
+import { CircularProgress } from "@mui/material";
+
 
 function App() {
   const isLoading = useAppSelector(isLoadingSelector);
@@ -30,18 +32,17 @@ function App() {
   useEffect(() => {
     if (isInitialized) {
       if (!isLoggedIn) {
-        //   navigate('/login')
         navigate('/login')
       } else {
         navigate('/packs')
       }
     }
-  },[isLoggedIn])
+  },[isInitialized, isLoggedIn])
 
   if (!isInitialized) {
     return <div
       style={{position: 'fixed', top: '30%', textAlign: 'center', width: '100%'}}>
-      {/*<CircularProgress/>*/} Проверка проверка
+      <CircularProgress/>
     </div>
   }
 
@@ -49,7 +50,6 @@ function App() {
     <div>
       <Header />
       {isLoading && <LinearProgress color="secondary" />}
-      {/*{!isNavigateToCard && <button onClick={navigateToCardHandler}>Перейти к карточкам</button>}*/}
       <Outlet />
     </div>
   );

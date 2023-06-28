@@ -6,14 +6,12 @@ import {
 } from "features/Cards/service/cards.api";
 import LinearProgress from "@mui/material/LinearProgress";
 import { ArgCreateCardType, CustomerError } from "features/Cards/service/cards.api.types";
-import { nanoid } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 import Pagination from "@mui/material/Pagination";
 import style from "./Cards.module.css";
-import arrowIcon from "./../../../common/images/arrow_left_icon.svg";
 import { TableCards } from "features/Cards/components/TableCards";
 import { useActions, useAppSelector } from "common/hooks";
-import { activePackSelector, cardPacksSelector } from "features/Packs/service/packs.selector";
+import { cardPacksSelector } from "features/Packs/service/packs.selector";
 import { userIdSelector } from "features/auth/auth.selector";
 import { SelectForPages } from "common/components/SelectForPages/SelectForPages";
 import { SearchInput } from "common/components/SearchInput/SearchInput";
